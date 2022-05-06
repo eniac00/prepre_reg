@@ -21,3 +21,7 @@ npm run dev
 
 
 4. then visit https://localhost:3000 or https://[DEVICE IP ADDRESS]:3000
+
+## ScreenShots
+
+![ss1](demo.png)
