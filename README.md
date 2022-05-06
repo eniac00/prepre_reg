@@ -20,4 +20,4 @@ npm run dev
 ```
 
 
-4. then visit localhost:[THE PORT NUMBER] (i.e: ip address can be used for accessing from other device)
+4. then visit https://localhost:3000 or https://[DEVICE IP ADDRESS]:3000
