@@ -179,7 +179,7 @@ function check(id, details) {
 
 function blanking_table(){
 
-    for(let i=1; i<=6; i++){
+    for(let i=1; i<=7; i++){
         for(let j=1; j<=7; j++){
             let id = i + "-" + j;
             document.getElementById(id).innerHTML = "";
