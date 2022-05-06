@@ -1,0 +1,39 @@
+.container{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+     }
+  
+  .left{
+     /*
+    background-color: cyan;
+    */
+    width:20vw;
+  }
+  
+  .center{
+     /*
+     background-color: yellow;
+     */
+     width:60vw;
+  }
+  
+  .right{
+     /*
+     background-color: orange;
+     */
+     width:20vw;
+  }
+
+  .warning{
+     font-size: 20px;
+     /*
+     background-color: skyblue;
+     */
+     color: red;
+  }
+  
+  .wrapper{
+     margin-top: 100px;
+     margin-bottom: 100px;
+  }

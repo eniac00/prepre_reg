@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    -->
+    <script src="dual-list/dual-listbox.js"></script>
+    <link href="dual-list/dual-listbox.css" rel="stylesheet" />
+    <link href="./styles.css"  rel="stylesheet" />
+    <title>prepre_reg</title>
+</head>
+<body>
+
+    <div class="heading"><center><h1>PrePre Registration</h1></center></div>
+
+    <div class="container">
+        <div class="left">
+            <h4><center>Info for Available</center></h5>
+            <h5 id="cname">Course Name: </h5>
+            <h5 id="faculty">Faculty: </h5>
+            <h5 id="section">Section: </h5>
+            <h5 id="time">Time: </h5>
+            <h5 id="avs">Total Seat: </h5>
+            <h5 id="sb">Seat Booked: </h5>
+            <h5 id="sr">Remaining: </h5>
+
+        </div>
+
+        <div class="center">
+            <select class="dlb" multiple></select>
+        </div>
+
+        <div class="right">
+            <h4><center>Info for Selected</center></h5>
+            <h5 id="cname">Course Name: </h5>
+            <h5 id="faculty">Faculty: </h5>
+            <h5 id="section">Section: </h5>
+            <h5 id="time">Time: </h5>
+            <h5 id="avs">Total Seat: </h5>
+            <h5 id="sb">Seat Booked: </h5>
+            <h5 id="sr">Remaining: </h5>
+        </div>
+    </div>
+
+    <center>
+        <div class="warning"></div>
+    </center>
+
+    <div class="wrapper">
+        <table align='center' cellspacing=2 cellpadding=10 id="data_table" border=1 style="width:70%">
+            <tr>
+                <th>Time/Day</th>
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+            </tr>
+            
+            <tr id="row1">
+                <td>08:00 am-09:20 am</td>
+                <td id="1-1"></td>
+                <td id="1-2"></td>
+                <td id="1-3"></td>
+                <td id="1-4"></td>
+                <td id="1-5"></td>
+                <td id="1-6"></td>
+                <td id="1-7"></td>
+            <tr>
+            <tr id="row2">
+                <td>09:30 am-10:50 am</td>
+                <td id="2-1"></td>
+                <td id="2-2"></td>
+                <td id="2-3"></td>
+                <td id="2-4"></td>
+                <td id="2-5"></td>
+                <td id="2-6"></td>
+                <td id="2-7"></td>
+            </tr>
+            <tr id="row3">
+                <td>11:00 am-12:20 pm</td>
+                <td id="3-1"></td>
+                <td id="3-2"></td>
+                <td id="3-3"></td>
+                <td id="3-4"></td>
+                <td id="3-5"></td>
+                <td id="3-6"></td>
+                <td id="3-7"></td>
+            </tr>
+            <tr id="row4">
+                <td>12:30 pm-01:50 pm</td>
+                <td id="4-1"></td>
+                <td id="4-2"></td>
+                <td id="4-3"></td>
+                <td id="4-4"></td>
+                <td id="4-5"></td>
+                <td id="4-6"></td>
+                <td id="4-7"></td>
+            </tr>
+            <tr id="row5">
+                <td>02:00 pm-03:20 pm</td>
+                <td id="5-1"></td>
+                <td id="5-2"></td>
+                <td id="5-3"></td>
+                <td id="5-4"></td>
+                <td id="5-5"></td>
+                <td id="5-6"></td>
+                <td id="5-7"></td>
+            </tr>
+            <tr id="row6">
+                <td>03:30 pm-04:50 pm</td>
+                <td id="6-1"></td>
+                <td id="6-2"></td>
+                <td id="6-3"></td>
+                <td id="6-4"></td>
+                <td id="6-5"></td>
+                <td id="6-6"></td>
+                <td id="6-7"></td>
+            </tr>
+            <tr id="row7">
+                <td>05:00 pm-06:20 pm</td>
+                <td id="7-1"></td>
+                <td id="7-2"></td>
+                <td id="7-3"></td>
+                <td id="7-4"></td>
+                <td id="7-5"></td>
+                <td id="7-6"></td>
+                <td id="7-7"></td>
+            </tr>
+        </table>
+    </div>
+
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    -->
+    <script src="./table.js"></script>
+    <script src="./index.js"></script>    
+</body>
+</html>
