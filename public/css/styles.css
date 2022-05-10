@@ -2,46 +2,47 @@
     display:flex;
     justify-content: center;
     align-items: center;
-     }
-  
-  .left{
-     /*
+}
+
+.left{
+    /*
     background-color: cyan;
     */
     width:20vw;
-  }
-  
-  .center{
+}
+
+.center{
      /*
      background-color: yellow;
      */
      width:60vw;
-  }
-  
-  .right{
+}
+
+.right{
      /*
      background-color: orange;
      */
      width:20vw;
-  }
+}
 
-  .warning{
+.warning{
      font-size: 20px;
      /*
      background-color: skyblue;
      */
      color: red;
-  }
-  
-  .wrapper{
+}
+
+.routine-table{
      margin-top: 100px;
      margin-bottom: 100px;
-  }
+}
 
-   .github-corner:hover .octo-arm {
+.github-corner:hover .octo-arm {
     animation: octocat-wave 560ms ease-in-out;
-  }
-  @keyframes octocat-wave {
+}
+
+@keyframes octocat-wave {
     0% {
         transform: rotate(0deg);
     }
@@ -65,4 +66,4 @@
     100% {
         transform: rotate(0deg);
     }
-  }
+}

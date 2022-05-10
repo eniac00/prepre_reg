@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const path = require('path');
 const tabletojson = require('tabletojson').Tabletojson;
-const fs = require('fs');
+//const fs = require('fs');
 require('dotenv').config();
 const port = process.env.PORT || 3000;
 
@@ -13,11 +13,8 @@ app.use(express.static(path.join(__dirname + '/public')));
 
 // routes declaration
 
-/*
-app.get('/', jsonsave, (req, res) => {
-    res.sendFile(path.join(__dirname + '/public/index.html'));
-})
-*/
+/* Below commented out section is for saving the fetched data into a json file
+ * This is only for testing purpose */
 
 app.get('/schedules', (req, res) => {
 
@@ -25,6 +22,7 @@ app.get('/schedules', (req, res) => {
         process.env.URL,
         { useFirstRowForHeadings: true },
         function (tableAsJson) {
+            /*
             fs.writeFile('./schedule.json', JSON.stringify(tableAsJson), err => {
                 if (err){
                     console.log(err);
@@ -32,6 +30,7 @@ app.get('/schedules', (req, res) => {
             });
 
             console.log('schedule saved successfully');
+            */
             return res.json(tableAsJson[0]);
         }
     );
