@@ -16,7 +16,7 @@ npm install
 4. After that run this to start the application.
 
 ```
-npm run dev
+npm run start
 
 ```
 5. Visit https://localhost:8000 or https://[DEVICE IP ADDRESS]:8000
