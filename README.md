@@ -24,5 +24,3 @@ npm run start
 ## ScreenShots
 
 ![ss1](./screenshots/demo.png)
-
-testing
