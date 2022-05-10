@@ -1,15 +1,24 @@
-function push_to_table(datum) {
+/*
+ * function for filtering out information and pushing inside the table
+ *
+ * @param {JSON_OBJ} desc->course_section
+ */
 
+function push_to_table (datum) {
 
     for(let i=0; i< datum["Day, Time, Room"].length; i++){
 
+        // defining regex for filtering out Day, Time and Room subsequently from each iteration
         let room = datum["Day, Time, Room"][i].match(/\w{7}/g)[0];
         let day = datum["Day, Time, Room"][i].match(/^\w{2}/g)[0];
         let time = datum["Day, Time, Room"][i].match(/\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M/g)[0];
 
 
+        // making the details for inserting inside table cell
         let details = `${datum['Course Code']}-${datum['Section']}-${datum['Faculty']}-${room}`;
 
+
+        // self explanatory I guess
         if (day == "Su") {
             switch (time) {
                 case "08:00 AM-09:20 AM":
@@ -166,23 +175,52 @@ function push_to_table(datum) {
     }
 }
 
+
+/*
+ * checks if the designated table cell is already booked or not
+ * inserting in the designated table cells with details accordingly
+ *
+ * @param {String} table cells id (i.e. "row-column")
+ * @param {String} already defined details that should be displayed in the cells
+ */
+
 function check(id, details) {
+
     let elem = document.getElementById(id);
+
     if (elem.innerHTML != "" && elem.innerHTML != details){
+
         elem.innerHTML = "<b>" + details + "</b>";
         elem.style.color = "red";
+
     } else {
+
         elem.innerHTML = details;
         elem.style.color = "black";
+
     }
 }
+
+
+/*
+ * removing all the table cells details
+ */
 
 function blanking_table(){
 
     for(let i=1; i<=7; i++){
+
         for(let j=1; j<=7; j++){
+
             let id = i + "-" + j;
             document.getElementById(id).innerHTML = "";
+
         }
     }
 }
+
+
+
+
+
+

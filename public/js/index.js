@@ -1,70 +1,92 @@
+async function start () {
 
-async function first () {
+    // poking the schedules route for the json data
     const res = await fetch('/schedules');
-
     const schedule = await res.json();
-
     const data = [];
 
+
+    // regex defined for filtering out the day, time and room from the string
     let re = /\w{2}\(\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M-\w{2}\d{5}\)/g;
 
+
+    // making the data for passing in the dlb (dual list box)
+    // also changing ["Day, Time, Room"] entry from string to array by using regex
     for(let i=1; i<schedule.length; i++){
 
         schedule[i]["Day, Time, Room"] = schedule[i]["Day, Time, Room"].match(re);
-
         data.push({
             value: i,
             text: `${schedule[i]['Course Code']}: sec-${schedule[i]['Section']}`,
             desc: schedule[i]
+
         });
     }
 
-    //console.log(data);
 
-
+    // defining dlb
     let dlb = new DualListbox('.dlb', {
+
+                // this function will be triggered when the add button is pressed within dlb
                 addEvent: function (value) {
 
                     let flag = true;
-                   // console.log(this.selected.length);
+                    // console.log(this.selected.length);
+                    
                     for(let i=0; i<this.selected.length-1; i++){
+                        
                         if (this.selected[i].innerHTML.split(':')[0] == data[value-1]['desc']["Course Code"]){
+
                             document.querySelector('.warning').innerHTML = "You can not select same course";
                             flag = false;
+
                         }
                     }
 
                     if (flag){
+
                         for(let i=0; i<this.selected.length; i++){
+
                             let data_index = this.selected[i].getAttribute("data-id")
                             push_to_table(data[data_index-1]['desc']);
+
                         }
                     }
                 },
 
+
+                // this function will be triggered when the remove button is pressed within dlb
                 removeEvent: function (value) {
+
                     let flag = true;
+
                     for(let i=0; i<this.selected.length; i++){
+
                         for(let j=i+1; j<this.selected.length; j++){
+
                             if (this.selected[i].innerHTML.split(':')[0] == this.selected[j].innerHTML.split(':')[0]){
+
                                 document.querySelector('.warning').innerHTML = "You can not select same course";
                                 flag = false;
+
                             }
                         }
                     }
 
                     if(flag){
-                        document.querySelector('.warning').innerHTML = "";
 
+                        document.querySelector('.warning').innerHTML = "";
                         blanking_table();
 
                         for(let i=0; i<this.selected.length; i++){
+
                             let data_index = this.selected[i].getAttribute("data-id")
                             push_to_table(data[data_index-1]['desc']);
-                        }
 
+                        }
                     }
                 },
+
                  
                 availableTitle: "Available Courses",
                 selectedTitle: "Selected Courses",
@@ -73,10 +95,15 @@ async function first () {
                 showAddAllButton: false,
                 showRemoveAllButton: false,
                 options: data
-            });
 
+    });
+
+
+    // function defined for for click event to be worked inside dlb
     dlb.addEventListener('click', (event)=>{
+
         if(event.target.closest(".dual-listbox__available") && event.target.className=="dual-listbox__item dual-listbox__item--selected"){
+
             let value = event.target.getAttribute('data-id');
             let course_desc = data[value-1]["desc"]
 
@@ -89,6 +116,7 @@ async function first () {
             document.querySelector(".left #sr").innerHTML = "Remaining: " + course_desc["Seat Remaining"];
 
         } else if (event.target.closest(".dual-listbox__selected") && event.target.className=="dual-listbox__item dual-listbox__item--selected"){
+
             let value = event.target.getAttribute('data-id');
             let course_desc = data[value-1]["desc"]
 
@@ -101,9 +129,10 @@ async function first () {
             document.querySelector(".right #sr").innerHTML = "Remaining: " + course_desc["Seat Remaining"];
 
         } else {
+            console.log("something fishy happend");
         }
-    })
+
+    });
 }
 
-
-first();
+start();
