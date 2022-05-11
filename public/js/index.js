@@ -1,19 +1,16 @@
-async function start () {
+async function start() {
 
     // poking the schedules route for the json data
     const res = await fetch('/schedules');
     const schedule = await res.json();
     const data = [];
 
-
     // regex defined for filtering out the day, time and room from the string
     let re = /\w{2}\(\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M-\w{2}\d{5}\)/g;
 
-
     // making the data for passing in the dlb (dual list box)
     // also changing ["Day, Time, Room"] entry from string to array by using regex
-    for(let i=1; i<schedule.length; i++){
-
+    for (let i = 1; i < schedule.length; i++) {
         schedule[i]["Day, Time, Room"] = schedule[i]["Day, Time, Room"].match(re);
         data.push({
             value: i,
@@ -23,116 +20,131 @@ async function start () {
         });
     }
 
-
     // defining dlb
     let dlb = new DualListbox('.dlb', {
 
-                // this function will be triggered when the add button is pressed within dlb
-                addEvent: function (value) {
-
-                    let flag = true;
-                    // console.log(this.selected.length);
-                    
-                    for(let i=0; i<this.selected.length-1; i++){
-                        
-                        if (this.selected[i].innerHTML.split(':')[0] == data[value-1]['desc']["Course Code"]){
-
-                            document.querySelector('.warning').innerHTML = "You can not select same course";
-                            flag = false;
-
-                        }
+        // this function will be triggered when the add button is pressed within dlb
+        addEvent: function (value) {
+            if (this.selected.length < 5) {
+                let flag = true;
+                let data_index;
+                let course_desc;
+                // console.log(this.selected.length);
+                for (let i = 0; i < this.selected.length - 1; i++) {
+                    if (this.selected[i].innerHTML.split(':')[0] == data[value - 1]['desc']["Course Code"]) {
+                        this.removeSelected(document.querySelector(`[data-id="${value}"]`));
+                        document.querySelector('.warning').innerHTML = "You can not select same course";
+                        flag = false;
                     }
-
-                    if (flag){
-
-                        for(let i=0; i<this.selected.length; i++){
-
-                            let data_index = this.selected[i].getAttribute("data-id")
-                            push_to_table(data[data_index-1]['desc']);
-
-                        }
+                }
+                if (flag) {
+                    for (let i = 0; i < this.selected.length; i++) {
+                        data_index = this.selected[i].getAttribute("data-id");
+                        course_desc = data[data_index - 1]['desc'];
+                        push_to_table(course_desc);
                     }
-                },
+                    course_desc = data[data_index-1]['desc'];
+                    info_populator("right", course_desc);
+                    info_unpopulator("left");
+                }
+            } else {
+                this.removeSelected(document.querySelector(`[data-id="${value}"]`));
+                document.querySelector('.warning').innerHTML = "You cannot select more than 4 courses";
+            }
+        },
 
-
-                // this function will be triggered when the remove button is pressed within dlb
-                removeEvent: function (value) {
-
-                    let flag = true;
-
-                    for(let i=0; i<this.selected.length; i++){
-
-                        for(let j=i+1; j<this.selected.length; j++){
-
-                            if (this.selected[i].innerHTML.split(':')[0] == this.selected[j].innerHTML.split(':')[0]){
-
-                                document.querySelector('.warning').innerHTML = "You can not select same course";
-                                flag = false;
-
-                            }
-                        }
+        // this function will be triggered when the remove button is pressed within dlb
+        removeEvent: function (value) {
+            let flag = true;
+            let data_index;
+            let course_desc;
+            for (let i = 0; i < this.selected.length; i++) {
+                for (let j = i + 1; j < this.selected.length; j++) {
+                    if (this.selected[i].innerHTML.split(':')[0] == this.selected[j].innerHTML.split(':')[0]) {
+                        flag = false;
                     }
+                }
+            }
+            if (flag) {
+                document.querySelector('.warning').innerHTML = "";
+                blanking_table();
+                for (let i = 0; i < this.selected.length; i++) {
+                    data_index = this.selected[i].getAttribute("data-id")
+                    push_to_table(data[data_index - 1]['desc']);
+                }
+                course_desc = data[value-1]['desc'];
+                info_populator("left", course_desc);
+                if(this.selected.length != 0){
+                    data_index = this.selected[this.selected.length-1].getAttribute("data-id");
+                    course_desc = data[data_index-1]['desc'];
+                    info_populator("right", course_desc);
+                } else {
+                    info_unpopulator("right");
+                }
+            }
+        },
 
-                    if(flag){
-
-                        document.querySelector('.warning').innerHTML = "";
-                        blanking_table();
-
-                        for(let i=0; i<this.selected.length; i++){
-
-                            let data_index = this.selected[i].getAttribute("data-id")
-                            push_to_table(data[data_index-1]['desc']);
-
-                        }
-                    }
-                },
-
-                 
-                availableTitle: "Available Courses",
-                selectedTitle: "Selected Courses",
-                addButtonText: ">",
-                removeButtonText: "<",
-                showAddAllButton: false,
-                showRemoveAllButton: false,
-                options: data
-
+        availableTitle: "Available Courses",
+        selectedTitle: "Selected Courses",
+        addButtonText: ">",
+        removeButtonText: "<",
+        showAddAllButton: false,
+        showRemoveAllButton: false,
+        options: data
     });
 
-
     // function defined for for click event to be worked inside dlb
-    dlb.addEventListener('click', (event)=>{
+    dlb.addEventListener('click', (event) => {
 
-        if(event.target.closest(".dual-listbox__available") && event.target.className=="dual-listbox__item dual-listbox__item--selected"){
-
+        if (event.target.closest(".dual-listbox__available") && event.target.className == "dual-listbox__item dual-listbox__item--selected") {
+            document.querySelector('.warning').innerHTML = "";
             let value = event.target.getAttribute('data-id');
-            let course_desc = data[value-1]["desc"]
-
-            document.querySelector(".left #cname").innerHTML = "Course Name: " + course_desc["Course Code"];
-            document.querySelector(".left #faculty").innerHTML = "Faculty: " + course_desc["Faculty"];
-            document.querySelector(".left #section").innerHTML = "Section: " + course_desc["Section"];
-            document.querySelector(".left #time").innerHTML = "Time: <br>" + course_desc["Day, Time, Room"];
-            document.querySelector(".left #avs").innerHTML = "Total Seat: " + course_desc["Total Seat"];
-            document.querySelector(".left #sb").innerHTML = "Seat Booked: " + course_desc["Seat Booked"];
-            document.querySelector(".left #sr").innerHTML = "Remaining: " + course_desc["Seat Remaining"];
-
-        } else if (event.target.closest(".dual-listbox__selected") && event.target.className=="dual-listbox__item dual-listbox__item--selected"){
-
-            let value = event.target.getAttribute('data-id');
-            let course_desc = data[value-1]["desc"]
-
-            document.querySelector(".right #cname").innerHTML = "Course Name: " + course_desc["Course Code"];
-            document.querySelector(".right #faculty").innerHTML = "Faculty: " + course_desc["Faculty"];
-            document.querySelector(".right #section").innerHTML = "Section: " + course_desc["Section"];
-            document.querySelector(".right #time").innerHTML = "Time: " + course_desc["Day, Time, Room"];
-            document.querySelector(".right #avs").innerHTML = "Total Seat: " + course_desc["Total Seat"];
-            document.querySelector(".right #sb").innerHTML = "Seat Booked: " + course_desc["Seat Booked"];
-            document.querySelector(".right #sr").innerHTML = "Remaining: " + course_desc["Seat Remaining"];
-
-        } else {
-            console.log("something fishy happend");
+            let course_desc = data[value - 1]["desc"]
+            info_populator("left", course_desc);
         }
-
+        if (event.target.closest(".dual-listbox__selected") && event.target.className == "dual-listbox__item dual-listbox__item--selected") {
+            document.querySelector('.warning').innerHTML = "";
+            let value = event.target.getAttribute('data-id');
+            let course_desc = data[value - 1]["desc"]
+            info_populator("right", course_desc);
+        }
     });
 }
 
+
+/*
+ * function for filtering out information and pushing inside the table
+ *
+ * @param {String} the side where infos should be populated
+ * @param {JSON} course description
+ */
+function info_populator (side, course_desc) {
+
+    document.querySelector(`.${side} #cname`).innerHTML = "Course Name: " + course_desc["Course Code"];
+    document.querySelector(`.${side} #faculty`).innerHTML = "Faculty: " + course_desc["Faculty"];
+    document.querySelector(`.${side} #section`).innerHTML = "Section: " + course_desc["Section"];
+    document.querySelector(`.${side} #time`).innerHTML = "Time: " + course_desc["Day, Time, Room"];
+    document.querySelector(`.${side} #avs`).innerHTML = "Total Seat: " + course_desc["Total Seat"];
+    document.querySelector(`.${side} #sb`).innerHTML = "Seat Booked: " + course_desc["Seat Booked"];
+    document.querySelector(`.${side} #sr`).innerHTML = "Remaining: " + course_desc["Seat Remaining"];
+}
+
+/*
+ * function for filtering out information and pushing inside the table
+ *
+ * @param {String} the side where infos should be removed
+ */
+function info_unpopulator (side) {
+
+    document.querySelector(`.${side} #cname`).innerHTML = "Course Name: ";
+    document.querySelector(`.${side} #faculty`).innerHTML = "Faculty: ";
+    document.querySelector(`.${side} #section`).innerHTML = "Section: ";
+    document.querySelector(`.${side} #time`).innerHTML = "Time: ";
+    document.querySelector(`.${side} #avs`).innerHTML = "Total Seat: ";
+    document.querySelector(`.${side} #sb`).innerHTML = "Seat Booked: ";
+    document.querySelector(`.${side} #sr`).innerHTML = "Remaining: ";
+}
+
+
 start();
+

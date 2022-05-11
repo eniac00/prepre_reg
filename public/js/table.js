@@ -13,10 +13,8 @@ function push_to_table (datum) {
         let day = datum["Day, Time, Room"][i].match(/^\w{2}/g)[0];
         let time = datum["Day, Time, Room"][i].match(/\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M/g)[0];
 
-
         // making the details for inserting inside table cell
         let details = `${datum['Course Code']}-${datum['Section']}-${datum['Faculty']}-${room}`;
-
 
         // self explanatory I guess
         if (day == "Su") {
@@ -187,34 +185,24 @@ function push_to_table (datum) {
 function check(id, details) {
 
     let elem = document.getElementById(id);
-
     if (elem.innerHTML != "" && elem.innerHTML != details){
-
         elem.innerHTML = "<b>" + details + "</b>";
         elem.style.color = "red";
-
     } else {
-
         elem.innerHTML = details;
         elem.style.color = "black";
-
     }
 }
-
 
 /*
  * removing all the table cells details
  */
 
 function blanking_table(){
-
     for(let i=1; i<=7; i++){
-
         for(let j=1; j<=7; j++){
-
             let id = i + "-" + j;
             document.getElementById(id).innerHTML = "";
-
         }
     }
 }
