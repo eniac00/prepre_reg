@@ -1,31 +1,44 @@
-.container{
+footer {
+    background-color:#6cf;
+    color: black;
+    text-align:center;
+    padding: 20px;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.allButFooter {
+    min-height: calc(100vh - 40px);
+}
+
+.container {
     display:flex;
     justify-content: center;
     align-items: center;
 }
 
-.left{
+.left {
     /*
     background-color: cyan;
     */
     width:20vw;
 }
 
-.center{
+.center {
      /*
      background-color: yellow;
      */
      width:60vw;
 }
 
-.right{
+.right {
      /*
      background-color: orange;
      */
      width:20vw;
 }
 
-.warning{
+.warning {
      font-size: 20px;
      /*
      background-color: skyblue;
@@ -33,7 +46,7 @@
      color: red;
 }
 
-.routine-table{
+.routine-table {
      margin-top: 100px;
      margin-bottom: 100px;
 }
