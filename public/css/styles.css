@@ -3,12 +3,17 @@ footer {
     color: black;
     text-align:center;
     padding: 20px;
-    font-size: 1.2rem;
+    font-size: 20px;
     margin: 0;
+}
+
+body {
+    background-color: aqua;
 }
 
 .allButFooter {
     min-height: calc(100vh - 40px);
+    margin: 10px;
 }
 
 .container {
@@ -18,23 +23,17 @@ footer {
 }
 
 .left {
-    /*
-    background-color: cyan;
-    */
+    /* background-color: brown; */
     width:20vw;
 }
 
 .center {
-     /*
-     background-color: yellow;
-     */
+     /* background-color: yellow; */
      width:60vw;
 }
 
 .right {
-     /*
-     background-color: orange;
-     */
+     /* background-color: orange; */
      width:20vw;
 }
 
@@ -44,12 +43,18 @@ footer {
      background-color: skyblue;
      */
      color: red;
+     padding: 20px;
 }
 
 .routine-table {
-     margin-top: 100px;
-     margin-bottom: 100px;
+     margin-bottom: 20px;
 }
+
+table {
+    width: 80%;
+    text-align: center;
+}
+
 
 .github-corner:hover .octo-arm {
     animation: octocat-wave 560ms ease-in-out;

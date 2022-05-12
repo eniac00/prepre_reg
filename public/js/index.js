@@ -88,8 +88,8 @@ async function start() {
         selectedTitle: "Selected Courses",
         addButtonText: ">",
         removeButtonText: "<",
+        removeAllButtonText: "<<",
         showAddAllButton: false,
-        showRemoveAllButton: false,
         options: data
     });
 
