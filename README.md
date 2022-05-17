@@ -21,6 +21,12 @@ npm run start
 ```
 5. Visit https://localhost:8000 or https://[DEVICE IP ADDRESS]:8000
 
+## Tutorial
+![tut1](./screenshots/tut.gif)
+
 ## ScreenShots
 
 ![ss1](./screenshots/demo.png)
+
+
+
