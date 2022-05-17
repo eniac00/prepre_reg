@@ -66,12 +66,14 @@
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
-    border-bottom: 1px solid #efefef;
+    /* border-bottom: 1px solid #a89494; */
     transition: background .2s ease
 }
 
 .dual-listbox .dual-listbox__item.dual-listbox__item--selected {
     background-color: #089de3b3
 }
+
+
 
 /*# sourceMappingURL=dual-listbox.css.map */
