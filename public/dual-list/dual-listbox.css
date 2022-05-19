@@ -1,6 +1,8 @@
 .dual-listbox {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .dual-listbox .dual-listbox__container {
@@ -8,12 +10,13 @@
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
+    margin-top: 10px;
 }
 
 .dual-listbox .dual-listbox__search {
     border: 1px solid #000;
     padding: 10px;
-    width: 92%
+    width: 93%
 }
 
 .dual-listbox .dual-listbox__available,
@@ -24,13 +27,14 @@
     padding: 0;
     width: 300px;
     margin-top: 0;
+    background-color: lavenderblush;
     -webkit-margin-before: 0
 }
 
 .dual-listbox .dual-listbox__buttons {
     display: flex;
     flex-direction: column;
-    margin: 0 10px;
+    margin: 10px;
 }
 
 .dual-listbox .dual-listbox__button {
@@ -50,9 +54,6 @@
     padding: 15px 10px;
     font-size: 120%;
     font-weight: 700;
-    /* border-left: 1px solid #efefef;
-    border-right: 1px solid #efefef;
-    border-top: 1px solid #efefef; */
     margin-top: 1rem;
     text-align: center;
     -webkit-margin-before: 1rem
@@ -72,6 +73,40 @@
 
 .dual-listbox .dual-listbox__item.dual-listbox__item--selected {
     background-color: #089de3b3
+}
+
+
+@media only screen and (max-width: 600px) {
+
+    .dual-listbox .dual-listbox__available,
+    .dual-listbox .dual-listbox__selected {
+        height: 200px;
+        width: 150px;
+    }
+    .dual-listbox .dual-listbox__container {
+        flex-wrap: nowrap;
+    }
+    .dual-listbox .dual-listbox__search {
+        width: 85%;
+        height: 10px;
+        font-size: 10px;
+    }
+    .dual-listbox .dual-listbox__title {
+        font-size: 12px;
+        margin-top: 0;
+    }
+    .dual-listbox .dual-listbox__buttons {
+        margin: 5px;
+    }
+    .dual-listbox .dual-listbox__button {
+        font-size: 10px;
+        padding: 5px;
+    }
+    .dual-listbox .dual-listbox__item {
+        font-size: 10px;
+        padding: 5px;
+    }
+
 }
 
 

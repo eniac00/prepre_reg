@@ -122,8 +122,27 @@ table {
         font-size: 20px;
     }
 
-    .left, .right {
-        display: none;
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .center {
+        order: 0;
+        width: 500px;
+
+    }
+
+    .left {
+        order: 1;
+        font-size: 10px;
+        width: 150px;
+    }
+
+    .right {
+        order: 2;
+        font-size: 10px;
+        width: 150px;
     }
 
 }
