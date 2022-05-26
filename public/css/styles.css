@@ -64,6 +64,14 @@ table {
     border-collapse: collapse;
 }
 
+#downloadTable {
+    width: 20%;
+    margin-left: 40%;
+    margin-right: 40%;
+    padding: 10px;
+    margin-top: 20px;
+}
+
 
 /* for the corner */
 
@@ -143,6 +151,14 @@ table {
         order: 2;
         font-size: 10px;
         width: 150px;
+    }
+
+    #downloadTable {
+        width: 50%;
+        margin-left: 25%;
+        margin-right: 25%;
+        padding: 10px;
+        margin-top: 20px;
     }
 
 }

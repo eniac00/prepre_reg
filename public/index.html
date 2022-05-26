@@ -165,6 +165,7 @@
                     </tr>
                 </table>
             </div>
+            <button id="downloadTable">Download the routine</button>
         </div>
 
         <footer>
@@ -178,7 +179,19 @@
         <!-- scripts for frontend are defined here -->
         <script src="./js/table.js"></script>
         <script src="./js/index.js"></script>    
-
+        <script src="./js/html2canvas.min.js"></script>
+        <script>
+            document.getElementById("downloadTable").addEventListener("click", () => {
+                html2canvas(document.getElementById("data_table")).then( (canvas) => {
+                    const base64image = canvas.toDataURL("image/png");
+                    var dlLink = document.createElement('a');
+                    dlLink.setAttribute("href", base64image);
+                    dlLink.setAttribute("download", "routine.png");
+                    dlLink.click();
+                    dlLink.remove();
+                });
+            });
+        </script>
     </body>
 </html>
 

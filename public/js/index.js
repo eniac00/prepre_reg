@@ -146,5 +146,6 @@ function info_unpopulator (side) {
 }
 
 
+
 start();
 
