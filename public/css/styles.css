@@ -161,5 +161,14 @@ table {
         margin-top: 20px;
     }
 
+    .warning {
+        font-size: 10px;
+        /*
+        background-color: skyblue;
+        */
+        color: red;
+        padding: 20px;
+    }
+
 }
 

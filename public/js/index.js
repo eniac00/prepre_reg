@@ -25,7 +25,7 @@ async function start() {
 
         // this function will be triggered when the add button is pressed within dlb
         addEvent: function (value) {
-            if (this.selected.length < 5) {
+            if (this.selected.length < 6) {
                 let flag = true;
                 let data_index;
                 let course_desc;
@@ -49,7 +49,7 @@ async function start() {
                 }
             } else {
                 this.removeSelected(document.querySelector(`[data-id="${value}"]`));
-                document.querySelector('.warning').innerHTML = "You cannot select more than 4 courses";
+                document.querySelector('.warning').innerHTML = "You cannot select more than 5 courses";
             }
         },
 
