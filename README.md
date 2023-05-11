@@ -1,4 +1,5 @@
 # PrePre Registration
+---
 
 An application that will give an opportunity to BracU students to prepare themselves before their pre-registration.
 
@@ -18,14 +19,30 @@ npm install
 ```
 npm run start
 ```
-5. Visit https://localhost:8000 or https://[DEVICE IP ADDRESS]:8000
+6. Visit
+```
+https://localhost:8000
+or 
+https://[DEVICE IP ADDRESS]:8000
+```
+
+
 
 ## Tutorial
+
 ![tut1](./screenshots/tut.gif)
+
+
 
 ## ScreenShots
 
-![ss1](./screenshots/demo.png)
+![ss1](./screenshots/demo_desktop.png)
 
 
 
+## Credit
+
+Truly indebted to these open-source projects,
+
+* **dual-listbox** : [https://github.com/maykinmedia/dual-listbox](https://github.com/maykinmedia/dual-listbox)
+* **html2canvas** : [https://html2canvas.hertzen.com/](https://html2canvas.hertzen.com/) 

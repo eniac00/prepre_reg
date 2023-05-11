@@ -40,14 +40,14 @@
 .dual-listbox .dual-listbox__button {
     margin-bottom: 10px;
     border: 0;
-    background-color: rgb(147, 224, 102);
+    background-color: #93e066;
     padding: 10px;
     color: #000;
     font-weight: bold;
 }
 
 .dual-listbox .dual-listbox__button:hover {
-    background-color: #ddd
+    background-color: #ddd;
 }
 
 .dual-listbox .dual-listbox__title {
@@ -74,7 +74,6 @@
 .dual-listbox .dual-listbox__item.dual-listbox__item--selected {
     background-color: #089de3b3
 }
-
 
 @media only screen and (max-width: 600px) {
 
@@ -108,7 +107,5 @@
     }
 
 }
-
-
 
 /*# sourceMappingURL=dual-listbox.css.map */

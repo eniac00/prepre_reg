@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Fanwood+Text&family=Roboto:wght@100;400&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;    
+    background-color: aqua;
+    margin: 0;
+}
+
+
 footer {
     background-color:#6cf;
     color: black;
@@ -8,14 +17,14 @@ footer {
 }
 
 .heading {
+    font-family: 'Fanwood Text', serif;
     padding: 10px;
     text-align: center;
     line-height: 5pt;
 }
 
-body {
-    background-color: aqua;
-    margin: 0;
+#cname, #faculty, #section, #time, #avs, #sb, #sr {
+    font-weight: lighter;
 }
 
 
@@ -65,11 +74,17 @@ table {
 }
 
 #downloadTable {
+    background-color: #93e066;
     width: 20%;
     margin-left: 40%;
     margin-right: 40%;
     padding: 10px;
     margin-top: 20px;
+    border: 0;
+}
+
+#downloadTable:hover {
+    background-color: #ddd;
 }
 
 
@@ -159,6 +174,8 @@ table {
         margin-right: 25%;
         padding: 10px;
         margin-top: 20px;
+        font-size: 12px;
+        font-weight: 400;
     }
 
     .warning {
@@ -169,6 +186,4 @@ table {
         color: red;
         padding: 20px;
     }
-
 }
-

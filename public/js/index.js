@@ -120,13 +120,13 @@ async function start() {
  */
 function info_populator (side, course_desc) {
 
-    document.querySelector(`.${side} #cname`).innerHTML = "Course Name: " + course_desc["Course Code"];
-    document.querySelector(`.${side} #faculty`).innerHTML = "Faculty: " + course_desc["Faculty"];
-    document.querySelector(`.${side} #section`).innerHTML = "Section: " + course_desc["Section"];
-    document.querySelector(`.${side} #time`).innerHTML = "Time: " + course_desc["Day, Time, Room"];
-    document.querySelector(`.${side} #avs`).innerHTML = "Total Seat: " + course_desc["Total Seat"];
-    document.querySelector(`.${side} #sb`).innerHTML = "Seat Booked: " + course_desc["Seat Booked"];
-    document.querySelector(`.${side} #sr`).innerHTML = "Remaining: " + course_desc["Seat Remaining"];
+    document.querySelector(`.${side} #cname`).innerHTML = course_desc["Course Code"];
+    document.querySelector(`.${side} #faculty`).innerHTML = course_desc["Faculty"];
+    document.querySelector(`.${side} #section`).innerHTML = course_desc["Section"];
+    document.querySelector(`.${side} #time`).innerHTML = course_desc["Day, Time, Room"];
+    document.querySelector(`.${side} #avs`).innerHTML = course_desc["Total Seat"];
+    document.querySelector(`.${side} #sb`).innerHTML = course_desc["Seat Booked"];
+    document.querySelector(`.${side} #sr`).innerHTML = course_desc["Seat Remaining"];
 }
 
 /*
@@ -136,13 +136,13 @@ function info_populator (side, course_desc) {
  */
 function info_unpopulator (side) {
 
-    document.querySelector(`.${side} #cname`).innerHTML = "Course Name: ";
-    document.querySelector(`.${side} #faculty`).innerHTML = "Faculty: ";
-    document.querySelector(`.${side} #section`).innerHTML = "Section: ";
-    document.querySelector(`.${side} #time`).innerHTML = "Time: ";
-    document.querySelector(`.${side} #avs`).innerHTML = "Total Seat: ";
-    document.querySelector(`.${side} #sb`).innerHTML = "Seat Booked: ";
-    document.querySelector(`.${side} #sr`).innerHTML = "Remaining: ";
+    document.querySelector(`.${side} #cname`).innerHTML = "";
+    document.querySelector(`.${side} #faculty`).innerHTML = "";
+    document.querySelector(`.${side} #section`).innerHTML = "";
+    document.querySelector(`.${side} #time`).innerHTML = "";
+    document.querySelector(`.${side} #avs`).innerHTML = "";
+    document.querySelector(`.${side} #sb`).innerHTML = "";
+    document.querySelector(`.${side} #sr`).innerHTML = "";
 }
 
 
