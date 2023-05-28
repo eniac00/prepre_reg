@@ -6,7 +6,7 @@ async function start() {
     const data = [];
 
     // regex defined for filtering out the day, time and room from the string
-    let re = /\w{2}\(\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M-\w{2}\d{5}\)/g;
+    let re = /\w{2}\(\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M-\w{2}\d{5,6}\)/g;
 
     // making the data for passing in the dlb (dual list box)
     // also changing ["Day, Time, Room"] entry from string to array by using regex

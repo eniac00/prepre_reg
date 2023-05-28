@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const path = require('path');
 const tabletojson = require('tabletojson').Tabletojson;
-//const fs = require('fs');
+// const fs = require('fs');
 require('dotenv').config();
 const port = process.env.PORT || 3000;
 
@@ -22,15 +22,14 @@ app.get('/schedules', (req, res) => {
         process.env.URL,
         { useFirstRowForHeadings: true },
         function (tableAsJson) {
-            /*
-            fs.writeFile('./schedule.json', JSON.stringify(tableAsJson), err => {
-                if (err){
-                    console.log(err);
-                }
-            });
+            
+            // fs.writeFile('./schedule.json', JSON.stringify(tableAsJson), err => {
+            //     if (err){
+            //         console.log(err);
+            //     }
+            // });
 
-            console.log('schedule saved successfully');
-            */
+            // console.log('schedule saved successfully');
             return res.json(tableAsJson[0]);
         }
     );
