@@ -44,5 +44,6 @@ https://[DEVICE IP ADDRESS]:8000
 
 Truly indebted to these open-source projects,
 
+* **tabletojson** : [https://www.npmjs.com/package/tabletojson](https://www.npmjs.com/package/tabletojson)
 * **dual-listbox** : [https://github.com/maykinmedia/dual-listbox](https://github.com/maykinmedia/dual-listbox)
 * **html2canvas** : [https://html2canvas.hertzen.com/](https://html2canvas.hertzen.com/) 
