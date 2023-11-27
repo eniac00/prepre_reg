@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const path = require('path');
-const tabletojson = require('tabletojson').Tabletojson;
+const {tabletojson} = require('tabletojson');
 // const fs = require('fs');
 require('dotenv').config();
 const port = process.env.PORT || 3000;
@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname + '/public')));
 app.get('/schedules', (req, res) => {
 
     tabletojson.convertUrl(
-        process.env.URL,
+        'https://web.archive.org/web/20230408032542/https://admissions.bracu.ac.bd/academia/admissionRequirement/getAvailableSeatStatus',
         { useFirstRowForHeadings: true },
         function (tableAsJson) {
             
