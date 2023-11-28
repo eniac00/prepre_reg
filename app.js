@@ -20,7 +20,8 @@ app.use(express.static(path.join(__dirname + '/public')));
 app.get('/schedules', async (req, res) => {
 
     
-    let data = await fetch("https://usis-cdn.eniamza.com/usisdump.json")
+    let response = await fetch("https://usis-cdn.eniamza.com/usisdump.json")
+    data = await response.json()
     
     // fs.writeFile('./schedule.json', JSON.stringify(await data.json()), err => {
     //     if (err){
@@ -28,8 +29,9 @@ app.get('/schedules', async (req, res) => {
     //     }
     // });
 
-    console.log('schedule saved successfully');
-    return res.json(data);
+    // console.log('schedule saved successfully');
+    // console.log(data)
+    res.json(data);
 
 
 })

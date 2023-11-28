@@ -3,6 +3,7 @@ async function start() {
     // poking the schedules route for the json data
     const res = await fetch('/schedules');
     const schedule = await res.json();
+    console.log(schedule[0])
     const data = [];
 
     // regex defined for filtering out the day, time and room from the string
@@ -12,10 +13,10 @@ async function start() {
     // making the data for passing in the dlb (dual list box)
     // also changing ["Day, Time, Room"] entry from string to array by using regex
     for (let i = 1; i < schedule.length; i++) {
-        schedule[i]["Day, Time, Room"] = schedule[i]["Day, Time, Room"].match(re);
+        schedule[i]["classSchedule"] = schedule[i]["classSchedule"].match(re);
         data.push({
             value: i,
-            text: `${schedule[i]['Course Code']}: sec-${schedule[i]['Section']}`,
+            text: `${schedule[i]['courseCode']}: sec-${schedule[i]['courseDetails'].split("-")[1]}`,
             desc: schedule[i]
             
 
