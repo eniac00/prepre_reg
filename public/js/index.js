@@ -49,7 +49,6 @@ async function start() {
                         course_desc = data[data_index - 1]['desc'];
                         push_to_table(course_desc);
                     }
-                    console.log(data)
                     course_desc = data[data_index-1]['desc'];
                     info_populator("right", course_desc);
                     info_unpopulator("left");
