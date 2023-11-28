@@ -2,7 +2,7 @@
 
 body {
     font-family: 'Roboto', sans-serif;    
-    background-color: aqua;
+    background-color: rgb(11, 11, 11);
     margin: 0;
 }
 
@@ -21,10 +21,12 @@ footer {
     padding: 10px;
     text-align: center;
     line-height: 5pt;
+    color: yellow
 }
 
 #cname, #faculty, #section, #time, #avs, #sb, #sr {
     font-weight: lighter;
+    color: yellow
 }
 
 
@@ -37,7 +39,28 @@ footer {
     display:flex;
     justify-content: center;
     align-items: center;
+    color: white;
 }
+
+
+
+.dual-listbox {
+    background-color: rgb(11, 11, 11);
+}
+
+.dual-listbox__available, .dual-listbox__selected {
+    background-color: rgb(11, 11, 11) !important;
+    border-width: 0.1mm !important;
+    border-color: yellow !important;
+    color: yellow;
+}
+
+
+.routine-table th, .routine-table td {
+    color: white;
+}
+
+
 
 .left {
     /* background-color: brown; */
@@ -74,7 +97,7 @@ table {
 }
 
 #downloadTable {
-    background-color: #93e066;
+    background-color: yellow;
     width: 20%;
     margin-left: 40%;
     margin-right: 40%;

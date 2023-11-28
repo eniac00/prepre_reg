@@ -191,7 +191,7 @@ function check(id, details) {
         elem.style.color = "red";
     } else {
         elem.innerHTML = details;
-        elem.style.color = "black";
+        elem.style.color = "white";
     }
 }
 
