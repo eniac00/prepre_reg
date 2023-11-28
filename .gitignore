@@ -1,2 +1,4 @@
 /node_modules/
 /schedule.json
+log.txt
+.gitignore
