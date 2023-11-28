@@ -16,7 +16,7 @@ async function start() {
         schedule[i]["classSchedule"] = schedule[i]["classSchedule"].match(re);
         data.push({
             value: i,
-            text: `${schedule[i]['courseCode']}: sec-${schedule[i]['courseDetails'].split("-")[1]}`,
+            text: `${schedule[i]['courseCode']}: sec-${schedule[i]['courseDetails'].split("-")[1].replace(/^\[|\]$/g, '')}`,
             desc: schedule[i]
             
 
