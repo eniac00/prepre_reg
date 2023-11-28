@@ -17,23 +17,21 @@ app.use(express.static(path.join(__dirname + '/public')));
 /* Below commented out section is for saving the fetched data into a json file
  * This is only for testing purpose */
 
-app.get('/schedules', (req, res) => {
+app.get('/schedules', async (req, res) => {
 
-    tabletojson.convertUrl(
-        'https://web.archive.org/web/20230408032542/https://admissions.bracu.ac.bd/academia/admissionRequirement/getAvailableSeatStatus',
-        { useFirstRowForHeadings: true },
-        function (tableAsJson) {
-            
-            fs.writeFile('./schedule.json', JSON.stringify(tableAsJson), err => {
-                if (err){
-                    console.log(err);
-                }
-            });
+    
+    let data = await fetch("https://usis-cdn.eniamza.com/usisdump.json")
+    
+    // fs.writeFile('./schedule.json', JSON.stringify(await data.json()), err => {
+    //     if (err){
+    //         console.log(err);
+    //     }
+    // });
 
-            console.log('schedule saved successfully');
-            return res.json(tableAsJson[0]);
-        }
-    );
+    console.log('schedule saved successfully');
+    return res.json(data);
+
+
 })
 
 app.listen(port, () => {
