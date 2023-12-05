@@ -7,13 +7,14 @@ async function start() {
     const data = [];
 
     // regex defined for filtering out the day, time and room from the string
-    let re = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\(\d{2}:\d{2}\s(AM|PM)-\d{2}:\d{2}\s(AM|PM)-\w{2}\d{5,6}\)/g; //Matches 
+    let re = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\(\d{2}:\d{2}\s(AM|PM)-\d{2}:\d{2}\s(AM|PM)-[^\)]+\)/g    //Matches 
 
 
     // making the data for passing in the dlb (dual list box)
     // also changing ["Day, Time, Room"] entry from string to array by using regex
     for (let i = 1; i < schedule.length; i++) {
         schedule[i]["classLabSchedule"] = schedule[i]["classLabSchedule"].match(re);
+        console.log(schedule[i]["classLabSchedule"])
         //RESUME HERE
         data.push({
             value: i,
@@ -127,7 +128,7 @@ async function start() {
 function info_populator (side, course_desc) {
 
     document.querySelector(`.${side} #cname`).innerHTML = course_desc["courseCode"];
-    document.querySelector(`.${side} #faculty`).innerHTML = `${course_desc["empName"]}-${course_desc["empShortName"]}`;
+    document.querySelector(`.${side} #faculty`).innerHTML = `${course_desc["empShortName"]}`;
     document.querySelector(`.${side} #section`).innerHTML = course_desc['courseDetails'].split("-")[1].replace(/^\[|\]$/g, '')
     document.querySelector(`.${side} #time`).innerHTML = course_desc["classLabSchedule"];
     document.querySelector(`.${side} #avs`).innerHTML = course_desc["defaultSeatCapacity"];

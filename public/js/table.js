@@ -10,7 +10,7 @@ function push_to_table (datum) {
     for(let i=0; i< datum["classLabSchedule"].length; i++){
 
         // defining regex for filtering out Day, Time and Room subsequently from each iteration
-        let room = datum["classLabSchedule"][i].match(/UB[^\)]+/)[0]
+        let room = datum["classLabSchedule"][i].match(/-\s*\d{2}:\d{2}\s(AM|PM)-\s*([^\)]+)/)[2];
         let day = datum["classLabSchedule"][i].match(/^\w+(?=\()/)[0];
         let time = datum["classLabSchedule"][i].match(/\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M/g)[0];
 

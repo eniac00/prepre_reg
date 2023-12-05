@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname + '/public')));
 app.get('/schedules', async (req, res) => {
 
     
-    let response = await fetch("https://usis-cdn.eniamza.com/usisdump.json")
+    let response = await fetch("https://usis-cdn.eniamza.com/old-usisdump.json")
     data = await response.json()
     
     // fs.writeFile('./schedule.json', JSON.stringify(await data.json()), err => {
