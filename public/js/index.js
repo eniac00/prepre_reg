@@ -127,8 +127,8 @@ async function start() {
  */
 function info_populator (side, course_desc) {
 
-    document.querySelector(`.${side} #cname`).innerHTML = course_desc["courseCode"];
-    document.querySelector(`.${side} #faculty`).innerHTML = `${course_desc["empShortName"]}`;
+    document.querySelector(`.${side} #cname`).innerHTML =  course_desc["courseCode"];
+    document.querySelector(`.${side} #faculty`).innerHTML = `${course_desc["empName"]}-${course_desc["empShortName"]}`;
     document.querySelector(`.${side} #section`).innerHTML = course_desc['courseDetails'].split("-")[1].replace(/^\[|\]$/g, '')
     document.querySelector(`.${side} #time`).innerHTML = course_desc["classLabSchedule"];
     document.querySelector(`.${side} #avs`).innerHTML = course_desc["defaultSeatCapacity"];
