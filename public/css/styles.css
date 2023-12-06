@@ -2,31 +2,39 @@
 
 body {
     font-family: 'Roboto', sans-serif;    
-    background-color: rgb(11, 11, 11);
+    background-color: rgb(17 24 39);
     margin: 0;
 }
 
 
 footer {
-    background-color:#6cf;
-    color: black;
+    background-color:rgb(25, 53, 113);
+    color: white;
     text-align:center;
     padding: 20px;
     font-size: 20px;
     margin: 0;
 }
 
+body > footer > a {
+
+    color: cyan;
+}
+
+
 .heading {
     font-family: 'Fanwood Text', serif;
     padding: 10px;
     text-align: center;
     line-height: 5pt;
-    color: yellow
+    color: white
 }
 
 #cname, #faculty, #section, #time, #avs, #sb, #sr {
     font-weight: lighter;
-    color: yellow
+    color: yellow;
+    font-weight: 900;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 
@@ -45,14 +53,14 @@ footer {
 
 
 .dual-listbox {
-    background-color: rgb(11, 11, 11);
+    background-color: rgb(17 24 39);
 }
 
 .dual-listbox__available, .dual-listbox__selected {
-    background-color: rgb(11, 11, 11) !important;
+    background-color: rgb(4, 29, 83)!important;
     border-width: 0.1mm !important;
-    border-color: yellow !important;
-    color: yellow;
+    border-color: cyan !important;
+    color: white;
 }
 
 
