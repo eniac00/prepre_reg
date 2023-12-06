@@ -14,7 +14,7 @@ async function start() {
     // also changing ["Day, Time, Room"] entry from string to array by using regex
     for (let i = 1; i < schedule.length; i++) {
         schedule[i]["classLabSchedule"] = schedule[i]["classLabSchedule"].match(re);
-        console.log(schedule[i]["classLabSchedule"])
+        // console.log(schedule[i]["classLabSchedule"])
         //RESUME HERE
         data.push({
             value: i,

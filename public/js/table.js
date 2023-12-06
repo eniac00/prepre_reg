@@ -192,6 +192,7 @@ function check(id, details) {
     } else {
         elem.innerHTML = details;
         elem.style.color = "white";
+        elem.classList.add("tda")
     }
 }
 

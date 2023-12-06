@@ -83,7 +83,7 @@ body > footer > a {
 }
 
 
-.routine-table th, .routine-table td {
+.routine-table th, .routine-table td, .routine-table tr {
     color: white;
 }
 

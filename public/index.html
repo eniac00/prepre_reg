@@ -214,14 +214,38 @@
         <script src="./js/html2canvas.min.js"></script>
         <script>
             document.getElementById("downloadTable").addEventListener("click", () => {
+                let tabledata = document.getElementsByClassName("tda")
+                    console.log(tabledata)
+                    Array.from(tabledata).forEach(element => {
+                        element.style.color = "black"    
+                    });
+                Array.from(document.getElementsByTagName("th")).forEach(element => {
+                    element.style.color="black"
+                });
+                Array.from(document.getElementsByTagName("td")).forEach(element => {
+                    element.style.color="black"
+                });
                 html2canvas(document.getElementById("data_table")).then( (canvas) => {
+
                     const base64image = canvas.toDataURL("image/png");
                     var dlLink = document.createElement('a');
                     dlLink.setAttribute("href", base64image);
                     dlLink.setAttribute("download", "routine.png");
                     dlLink.click();
                     dlLink.remove();
+                    Array.from(tabledata).forEach(element => {
+                        element.style.color = "white"    
+                    });
+
+                    Array.from(document.getElementsByTagName("th")).forEach(element => {
+                    element.style.color="white"
                 });
+                Array.from(document.getElementsByTagName("td")).forEach(element => {
+                    element.style.color="white"
+                });
+                    
+                });
+                
             });
         </script>
     </body>
