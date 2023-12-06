@@ -7,6 +7,7 @@ body {
 }
 
 
+
 footer {
     background-color:rgb(25, 53, 113);
     color: white;
@@ -24,11 +25,29 @@ body > footer > a {
 
 .heading {
     font-family: 'Fanwood Text', serif;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
     line-height: 5pt;
     color: white
 }
+
+.icons {
+    display: flex; /* Use flexbox to align icons */
+    justify-content: center; /* Center the icons horizontally */
+    align-items: center; /* Center the icons vertically (if needed) */
+    margin-top: 0px; /* Add some space between the h1 and the icons */
+}
+
+.icon {
+    fill: white; /* Initial color of icons */
+    transition: fill 0.3s ease; /* Smooth transition for color change */
+    margin: 0 3px; /* Spacing between icons */
+}
+
+.icon:hover {
+    fill: cyan; /* Color change on hover */
+}
+
 
 #cname, #faculty, #section, #time, #avs, #sb, #sr {
     font-weight: lighter;
