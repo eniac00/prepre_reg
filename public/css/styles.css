@@ -32,10 +32,10 @@ body > footer > a {
 }
 
 .icons {
-    display: flex; /* Use flexbox to align icons */
-    justify-content: center; /* Center the icons horizontally */
-    align-items: center; /* Center the icons vertically (if needed) */
-    margin-top: 0px; /* Add some space between the h1 and the icons */
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 0px; 
 }
 
 .icon {
