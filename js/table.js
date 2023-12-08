@@ -6,18 +6,19 @@
 
 function push_to_table (datum) {
 
-    for(let i=0; i< datum["Day, Time, Room"].length; i++){
+
+    for(let i=0; i< datum["classLabSchedule"].length; i++){
 
         // defining regex for filtering out Day, Time and Room subsequently from each iteration
-        let room = datum["Day, Time, Room"][i].match(/\w{7}/g)[0];
-        let day = datum["Day, Time, Room"][i].match(/^\w{2}/g)[0];
-        let time = datum["Day, Time, Room"][i].match(/\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M/g)[0];
+        let room = datum["classLabSchedule"][i].match(/-\s*\d{2}:\d{2}\s(AM|PM)-\s*([^\)]+)/)[2];
+        let day = datum["classLabSchedule"][i].match(/^\w+(?=\()/)[0];
+        let time = datum["classLabSchedule"][i].match(/\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M/g)[0];
 
         // making the details for inserting inside table cell
-        let details = `${datum['Course Code']}-${datum['Section']}-${datum['Faculty']}-${room}`;
+        let details = `${datum['courseCode']}-${datum['courseDetails'].split("-")[1].replace(/^\[|\]$/g, '')}-${datum['empShortName']}-${room}`;
 
         // self explanatory I guess
-        if (day == "Su") {
+        if (day == "Sunday") {
             switch (time) {
                 case "08:00 AM-09:20 AM":
                     check("1-1", details);
@@ -42,7 +43,7 @@ function push_to_table (datum) {
                     break;
                 default:
             }
-        } else if (day == "Mo") {
+        } else if (day == "Monday") {
             switch (time) {
                 case "08:00 AM-09:20 AM":
                     check("1-2", details);
@@ -67,7 +68,7 @@ function push_to_table (datum) {
                     break;
                 default:
             }
-        } else if (day == "Tu") {
+        } else if (day == "Tuesday") {
             switch (time) {
                 case "08:00 AM-09:20 AM":
                     check("1-3", details);
@@ -92,7 +93,7 @@ function push_to_table (datum) {
                     break;
                 default:
             }
-        } else if (day == "We") {
+        } else if (day == "Wednesday") {
             switch (time) {
                 case "08:00 AM-09:20 AM":
                     check("1-4", details);
@@ -117,7 +118,7 @@ function push_to_table (datum) {
                     break;
                 default:
             }
-        } else if (day == "Th") {
+        } else if (day == "Thursday") {
             switch (time) {
                 case "08:00 AM-09:20 AM":
                     check("1-5", details);
@@ -142,7 +143,7 @@ function push_to_table (datum) {
                     break;
                 default:
             }
-        } else if (day == "Sa") {
+        } else if (day == "Saturday") {
             switch (time) {
                 case "08:00 AM-09:20 AM":
                     check("1-7", details);
@@ -190,7 +191,8 @@ function check(id, details) {
         elem.style.color = "red";
     } else {
         elem.innerHTML = details;
-        elem.style.color = "black";
+        elem.style.color = "white";
+        elem.classList.add("tda")
     }
 }
 

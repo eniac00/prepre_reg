@@ -1,2 +1,8 @@
 /node_modules/
 /schedule.json
+log.txt
+.gitignore
+public/index.html
+.gitignore
+public/.DS_Store
+.DS_Store

@@ -1,37 +1,46 @@
+
 async function start() {
 
+
     // poking the schedules route for the json data
-    const res = await fetch('/schedules');
+    const res = await fetch('https://usis-cdn.eniamza.com/usisdump.json');
     const schedule = await res.json();
+    // console.log(schedule[0])
     const data = [];
 
     // regex defined for filtering out the day, time and room from the string
-    let re = /\w{2}\(\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M-\w{2}\d{5,6}\)/g;
+    let re = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\(\d{2}:\d{2}\s(AM|PM)-\d{2}:\d{2}\s(AM|PM)-[^\)]+\)/g    //Matches 
+
 
     // making the data for passing in the dlb (dual list box)
     // also changing ["Day, Time, Room"] entry from string to array by using regex
     for (let i = 1; i < schedule.length; i++) {
-        schedule[i]["Day, Time, Room"] = schedule[i]["Day, Time, Room"].match(re);
+        schedule[i]["classLabSchedule"] = schedule[i]["classLabSchedule"].match(re);
+        // console.log(schedule[i]["classLabSchedule"])
+        //RESUME HERE
         data.push({
             value: i,
-            text: `${schedule[i]['Course Code']}: sec-${schedule[i]['Section']}`,
+            text: `${schedule[i]['courseCode']}: sec-${schedule[i]['courseDetails'].split("-")[1].replace(/^\[|\]$/g, '')}`,
             desc: schedule[i]
+            
 
         });
     }
+
+                                                                                                                       
 
     // defining dlb
     let dlb = new DualListbox('.dlb', {
 
         // this function will be triggered when the add button is pressed within dlb
         addEvent: function (value) {
+
             if (this.selected.length < 6) {
                 let flag = true;
                 let data_index;
                 let course_desc;
-                // console.log(this.selected.length);
                 for (let i = 0; i < this.selected.length - 1; i++) {
-                    if (this.selected[i].innerHTML.split(':')[0] == data[value - 1]['desc']["Course Code"]) {
+                    if (this.selected[i].innerHTML.split(':')[0] == data[value - 1]['desc']["courseCode"]) {
                         this.removeSelected(document.querySelector(`[data-id="${value}"]`));
                         document.querySelector('.warning').innerHTML = "You can not select same course";
                         flag = false;
@@ -120,13 +129,13 @@ async function start() {
  */
 function info_populator (side, course_desc) {
 
-    document.querySelector(`.${side} #cname`).innerHTML = course_desc["Course Code"];
-    document.querySelector(`.${side} #faculty`).innerHTML = course_desc["Faculty"];
-    document.querySelector(`.${side} #section`).innerHTML = course_desc["Section"];
-    document.querySelector(`.${side} #time`).innerHTML = course_desc["Day, Time, Room"];
-    document.querySelector(`.${side} #avs`).innerHTML = course_desc["Total Seat"];
-    document.querySelector(`.${side} #sb`).innerHTML = course_desc["Seat Booked"];
-    document.querySelector(`.${side} #sr`).innerHTML = course_desc["Seat Remaining"];
+    document.querySelector(`.${side} #cname`).innerHTML =  course_desc["courseCode"];
+    document.querySelector(`.${side} #faculty`).innerHTML = `${course_desc["empName"]}-${course_desc["empShortName"]}`;
+    document.querySelector(`.${side} #section`).innerHTML = course_desc['courseDetails'].split("-")[1].replace(/^\[|\]$/g, '')
+    document.querySelector(`.${side} #time`).innerHTML = course_desc["classLabSchedule"];
+    document.querySelector(`.${side} #avs`).innerHTML = course_desc["defaultSeatCapacity"];
+    document.querySelector(`.${side} #sb`).innerHTML = course_desc["totalFillupSeat"];
+    document.querySelector(`.${side} #sr`).innerHTML = course_desc["availableSeat"];
 }
 
 /*
