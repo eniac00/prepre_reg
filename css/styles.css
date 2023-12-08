@@ -49,7 +49,7 @@ body > footer > a {
 }
 
 
-#cname, #faculty, #section, #time, #avs, #sb, #sr {
+#cname, #faculty, #section, #time, #avs, #sb, #sr, #prereq {
     font-weight: lighter;
     color: rgb(136, 243, 243);
     font-weight: 900;
