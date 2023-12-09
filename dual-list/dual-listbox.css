@@ -13,11 +13,37 @@
     margin-top: 10px;
 }
 
-.dual-listbox .dual-listbox__search {
-    border: 1px solid #000;
+.dual-listbox {
+    border: 0px solid #000;
     padding: 10px;
-    width: 93%
+    width: 93%;
+
+
+    
 }
+.dual-listbox__search {
+    border: 2px solid rgb(83, 104, 135);
+    border-radius: 5px;
+    padding: 10px;
+    width: 93%;
+    background-color: rgb(51 65 85);
+    caret-color: #a0aec0;
+    color: white;
+    font-weight: bold;
+
+}
+
+.dual-listbox__search:focus {
+    outline: 0;
+    border: 2px solid rgb(46, 119, 222);
+    transition: all ease-in-out 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dual-listbox__search::placeholder {
+    color: #a0aec0;
+    text-align: center;
+  }
 
 .dual-listbox .dual-listbox__available,
 .dual-listbox .dual-listbox__selected {

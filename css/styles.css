@@ -31,6 +31,11 @@ body > footer > a {
     color: white
 }
 
+.titlehead {
+    color: rgb(250 204 21);
+    padding-bottom: 2px;
+}
+
 .icons {
     display: flex; 
     justify-content: center; 
@@ -49,7 +54,7 @@ body > footer > a {
 }
 
 
-#cname, #faculty, #section, #time, #avs, #sb, #sr {
+#cname, #faculty, #section, #time, #avs, #sb, #sr, #prereq {
     font-weight: lighter;
     color: rgb(136, 243, 243);
     font-weight: 900;

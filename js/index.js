@@ -131,6 +131,7 @@ function info_populator (side, course_desc) {
 
     document.querySelector(`.${side} #cname`).innerHTML =  course_desc["courseCode"];
     document.querySelector(`.${side} #faculty`).innerHTML = `${course_desc["empName"]}-${course_desc["empShortName"]}`;
+    document.querySelector(`.${side} #prereq`).innerHTML = course_desc["preRequisiteCourses"];
     document.querySelector(`.${side} #section`).innerHTML = course_desc['courseDetails'].split("-")[1].replace(/^\[|\]$/g, '')
     document.querySelector(`.${side} #time`).innerHTML = course_desc["classLabSchedule"];
     document.querySelector(`.${side} #avs`).innerHTML = course_desc["defaultSeatCapacity"];
@@ -147,6 +148,7 @@ function info_unpopulator (side) {
 
     document.querySelector(`.${side} #cname`).innerHTML = "";
     document.querySelector(`.${side} #faculty`).innerHTML = "";
+    document.querySelector(`.${side} #prereq`).innerHTML = ""
     document.querySelector(`.${side} #section`).innerHTML = "";
     document.querySelector(`.${side} #time`).innerHTML = "";
     document.querySelector(`.${side} #avs`).innerHTML = "";
