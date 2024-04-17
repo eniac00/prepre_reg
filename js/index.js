@@ -7,6 +7,7 @@ async function start() {
     const schedule = await res.json();
     // console.log(schedule[0])
     const data = [];
+    let course_and_exam = [];
 
     // regex defined for filtering out the day, time and room from the string
     let re = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\(\d{2}:\d{2}\s(AM|PM)-\d{2}:\d{2}\s(AM|PM)-[^\)]+\)/g    //Matches 
@@ -22,8 +23,6 @@ async function start() {
             value: i,
             text: `${schedule[i]['courseCode']}: sec-${schedule[i]['courseDetails'].split("-")[1].replace(/^\[|\]$/g, '')}`,
             desc: schedule[i]
-            
-
         });
     }
 
@@ -53,9 +52,15 @@ async function start() {
                         push_to_table(course_desc);
                     }
                     course_desc = data[data_index-1]['desc'];
+                    course_and_exam.push({ 
+                        'courseCode': course_desc.courseCode, 
+                        'dayNo': course_desc.dayNo 
+                    });
+                    populateExamWarning(findDuplicateExamDays(course_and_exam));
                     info_populator("right", course_desc);
                     info_unpopulator("left");
                 }
+                console.log(course_and_exam);
             } else {
                 this.removeSelected(document.querySelector(`[data-id="${value}"]`));
                 document.querySelector('.warning').innerHTML = "You cannot select more than 5 courses";
@@ -82,6 +87,8 @@ async function start() {
                     push_to_table(data[data_index - 1]['desc']);
                 }
                 course_desc = data[value-1]['desc'];
+                course_and_exam = course_and_exam.filter(course => course.courseCode !== course_desc.courseCode);
+                populateExamWarning(findDuplicateExamDays(course_and_exam));
                 info_populator("left", course_desc);
                 if(this.selected.length != 0){
                     data_index = this.selected[this.selected.length-1].getAttribute("data-id");
@@ -91,6 +98,7 @@ async function start() {
                     info_unpopulator("right");
                 }
             }
+                console.log(course_and_exam);
         },
 
         availableTitle: "Available Courses",
@@ -109,6 +117,7 @@ async function start() {
             document.querySelector('.warning').innerHTML = "";
             let value = event.target.getAttribute('data-id');
             let course_desc = data[value - 1]["desc"]
+            // console.log(course_desc);
             info_populator("left", course_desc);
         }
         if (event.target.closest(".dual-listbox__selected") && event.target.className == "dual-listbox__item dual-listbox__item--selected") {
@@ -134,6 +143,7 @@ function info_populator (side, course_desc) {
     document.querySelector(`.${side} #prereq`).innerHTML = course_desc["preRequisiteCourses"];
     document.querySelector(`.${side} #section`).innerHTML = course_desc['courseDetails'].split("-")[1].replace(/^\[|\]$/g, '')
     document.querySelector(`.${side} #time`).innerHTML = course_desc["classLabSchedule"];
+    document.querySelector(`.${side} #exam`).innerHTML = course_desc["dayNo"];
     document.querySelector(`.${side} #avs`).innerHTML = course_desc["defaultSeatCapacity"];
     document.querySelector(`.${side} #sb`).innerHTML = course_desc["totalFillupSeat"];
     document.querySelector(`.${side} #sr`).innerHTML = course_desc["availableSeat"];
@@ -151,11 +161,46 @@ function info_unpopulator (side) {
     document.querySelector(`.${side} #prereq`).innerHTML = ""
     document.querySelector(`.${side} #section`).innerHTML = "";
     document.querySelector(`.${side} #time`).innerHTML = "";
+    document.querySelector(`.${side} #exam`).innerHTML = "";
     document.querySelector(`.${side} #avs`).innerHTML = "";
     document.querySelector(`.${side} #sb`).innerHTML = "";
     document.querySelector(`.${side} #sr`).innerHTML = "";
 }
 
+
+
+function findDuplicateExamDays(courses) {
+    const dayMap = {};
+    const duplicates = [];
+
+    courses.forEach(course => {
+        if (!dayMap[course.dayNo]) {
+            dayMap[course.dayNo] = [course.courseCode];
+        } else {
+            if (!dayMap[course.dayNo].includes(course.courseCode)) {
+                dayMap[course.dayNo].push(course.courseCode);
+            }
+            if (dayMap[course.dayNo].length > 1 && !duplicates.some(d => d.dayNo === course.dayNo)) {
+                duplicates.push({ 
+                    dayNo: course.dayNo, 
+                    courseCodes: dayMap[course.dayNo] 
+                });
+            }
+        }
+    });
+
+    return duplicates;
+}
+
+function populateExamWarning(duplicateDays) {
+    const examWarningElement = document.querySelector('.examWarning');
+    if (duplicateDays.length === 0) {
+        examWarningElement.innerHTML = '';
+    } else {
+        const html = duplicateDays.map(day => `${day.courseCodes.join(', ')} exam clashes on ${day.dayNo}<br>`).join('');
+        examWarningElement.innerHTML = html; // Populate inner HTML
+    }
+}
 
 
 start();

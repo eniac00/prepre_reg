@@ -118,6 +118,15 @@ body > footer > a {
      padding: 20px;
 }
 
+.examWarning {
+     font-size: 20px;
+     /*
+     background-color: skyblue;
+     */
+     color: royalblue;
+     padding: 20px;
+}
+
 .routine-table {
      margin-bottom: 20px;
 }
