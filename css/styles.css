@@ -109,12 +109,21 @@ body > footer > a {
      width:20vw;
 }
 
-.warning, .examWarning {
+.warning {
      font-size: 20px;
      /*
      background-color: skyblue;
      */
      color: red;
+     padding: 20px;
+}
+
+.examWarning {
+     font-size: 20px;
+     /*
+     background-color: skyblue;
+     */
+     color: royalblue;
      padding: 20px;
 }
 
