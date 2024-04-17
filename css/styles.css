@@ -109,7 +109,7 @@ body > footer > a {
      width:20vw;
 }
 
-.warning {
+.warning, .examWarning {
      font-size: 20px;
      /*
      background-color: skyblue;
