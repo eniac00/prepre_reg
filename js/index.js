@@ -146,7 +146,7 @@ function info_populator (side, course_desc) {
     document.querySelector(`.${side} #exam`).innerHTML = course_desc["dayNo"];
     document.querySelector(`.${side} #avs`).innerHTML = course_desc["defaultSeatCapacity"];
     document.querySelector(`.${side} #sb`).innerHTML = course_desc["totalFillupSeat"];
-    document.querySelector(`.${side} #sr`).innerHTML = course_desc["availableSeat"];
+    document.querySelector(`.${side} #sr`).innerHTML = course_desc["defaultSeatCapacity"] - course_desc["totalFillupSeat"];
 }
 
 /*
