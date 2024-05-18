@@ -5,6 +5,8 @@ async function start() {
     // poking the schedules route for the json data
     const res = await fetch('https://usis-cdn.eniamza.com/usisdump.json');
     const schedule = await res.json();
+
+    // sort the courses according to the section (ascending)
     schedule.sort(function(a, b) {
         return a["courseDetails"].localeCompare(b["courseDetails"]);
     });
