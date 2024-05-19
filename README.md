@@ -5,7 +5,7 @@ An application that will give an opportunity to BracU students to prepare themse
 
 ## How to run
 
-open any browser (chrome, firefox, brave etc) and press `ctrl+o` to open the `index.html`.
+Open any browser (chrome, firefox, brave etc) and press `ctrl+o` to open the `index.html`.
 
 ### Alternate way (serve the webpage)
 
@@ -25,9 +25,9 @@ http-server
 ```
 After serving visit with any browser using any of the socket address provided below.
 ```
-https://localhost:5500
+https://localhost:8080
 or 
-https://[DEVICE IP ADDRESS]:5500
+https://<DEVICE IP ADDRESS>:8080
 ```
 
 
