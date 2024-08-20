@@ -5,6 +5,11 @@ async function start() {
     // poking the schedules route for the json data
     const res = await fetch('https://usis-cdn.eniamza.com/usisdump.json');
     const schedule = await res.json();
+
+    // sort the courses according to the section (ascending)
+    schedule.sort(function(a, b) {
+        return a["courseDetails"].localeCompare(b["courseDetails"]);
+    });
     // console.log(schedule[0])
     const data = [];
     let course_and_exam = [];
@@ -146,7 +151,7 @@ function info_populator (side, course_desc) {
     document.querySelector(`.${side} #exam`).innerHTML = course_desc["dayNo"];
     document.querySelector(`.${side} #avs`).innerHTML = course_desc["defaultSeatCapacity"];
     document.querySelector(`.${side} #sb`).innerHTML = course_desc["totalFillupSeat"];
-    document.querySelector(`.${side} #sr`).innerHTML = course_desc["availableSeat"];
+    document.querySelector(`.${side} #sr`).innerHTML = course_desc["defaultSeatCapacity"] - course_desc["totalFillupSeat"];
 }
 
 /*
