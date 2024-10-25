@@ -7,12 +7,19 @@
 function push_to_table (datum) {
 
 
-    for(let i=0; i< datum["classLabSchedule"].length; i++){
-
+    for(let i=0; i< datum["classSchedule"].length; i++){
+        
         // defining regex for filtering out Day, Time and Room subsequently from each iteration
-        let room = datum["classLabSchedule"][i].match(/-\s*\d{2}:\d{2}\s(AM|PM)-\s*([^\)]+)/)[2];
-        let day = datum["classLabSchedule"][i].match(/^\w+(?=\()/)[0];
-        let time = datum["classLabSchedule"][i].match(/\d{2}:\d{2}\s(A|P)M-\d{2}:\d{2}\s(A|P)M/g)[0];
+        let roomMatch = datum["classSchedule"][i].match(/-\d{2}:\d{2}\s(AM|PM)-([^\)]+)/);
+        let room = roomMatch ? roomMatch[2] : "Room not found";
+    
+        // Match the day part
+        let dayMatch = datum["classSchedule"][i].match(/^\w+(?=\()/);
+        let day = dayMatch ? dayMatch[0] : "Day not found";
+    
+        // Match the time part
+        let timeMatch = datum["classSchedule"][i].match(/\d{2}:\d{2}\s(AM|PM)-\d{2}:\d{2}\s(AM|PM)/);
+        let time = timeMatch ? timeMatch[0] : "Time not found";
 
         // making the details for inserting inside table cell
         let details = `${datum['courseCode']}-${datum['courseDetails'].split("-")[1].replace(/^\[|\]$/g, '')}-${datum['empShortName']}-${room}`;
@@ -208,6 +215,7 @@ function blanking_table(){
         }
     }
 }
+
 
 
 
