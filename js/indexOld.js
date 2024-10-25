@@ -74,9 +74,19 @@ async function start() {
                         push_to_table(course_desc);
                     }
                     course_desc = data[data_index-1]['desc'];
+                    const dateRegex = /\((\d{2}-\d{2}-\d{4})\)/;
+                    const timeRegex = /\((\d{2}:\d{2}\s(?:AM|PM)-\d{2}:\d{2}\s(?:AM|PM))\)/;
+
+                    let dateMatch = course_desc.dayNo.match(dateRegex);
+                    let timeMatch = course_desc.dayNo.match(timeRegex);
+
+                    console.log(dateMatch, timeMatch);
+
                     course_and_exam.push({ 
                         'courseCode': course_desc.courseCode, 
-                        'dayNo': course_desc.dayNo 
+                        'date': dateMatch[0],
+                        'time': timeMatch[0]
+
                     });
                     populateExamWarning(findDuplicateExamDays(course_and_exam));
                     info_populator("right", course_desc);
@@ -193,19 +203,20 @@ function info_unpopulator (side) {
 
 function findDuplicateExamDays(courses) {
     const dayMap = {};
+    const timeMap = {};
     const duplicates = [];
 
     courses.forEach(course => {
-        if (!dayMap[course.dayNo]) {
-            dayMap[course.dayNo] = [course.courseCode];
+        if (!dayMap[course.date]) {
+            dayMap[course.date] = [course.courseCode];
         } else {
-            if (!dayMap[course.dayNo].includes(course.courseCode)) {
-                dayMap[course.dayNo].push(course.courseCode);
+            if (!dayMap[course.date].includes(course.courseCode)) {
+                dayMap[course.date].push(course.courseCode);
             }
-            if (dayMap[course.dayNo].length > 1 && !duplicates.some(d => d.dayNo === course.dayNo)) {
+            if (dayMap[course.date].length > 1 && !duplicates.some(d => d.date === course.date)) {
                 duplicates.push({ 
-                    dayNo: course.dayNo, 
-                    courseCodes: dayMap[course.dayNo] 
+                    date: course.date, 
+                    courseCodes: dayMap[course.date] 
                 });
             }
         }
@@ -219,7 +230,7 @@ function populateExamWarning(duplicateDays) {
     if (duplicateDays.length === 0) {
         examWarningElement.innerHTML = '';
     } else {
-        const html = duplicateDays.map(day => `${day.courseCodes.join(', ')} exam clashes on ${day.dayNo}<br>`).join('');
+        const html = duplicateDays.map(day => `${day.courseCodes.join(', ')} exam clashes on ${day.date}<br>`).join('');
         examWarningElement.innerHTML = html; // Populate inner HTML
     }
 }
