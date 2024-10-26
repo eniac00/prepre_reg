@@ -84,8 +84,8 @@ async function start() {
 
                     course_and_exam.push({ 
                         'courseCode': course_desc.courseCode, 
-                        'date': dateMatch[0],
-                        'time': timeMatch[0]
+                        'date': dateMatch?.[0] || 'N/A',
+                        'time': timeMatch?.[0] || 'N/A'
 
                     });
                     populateExamWarning(findDuplicateExamDays(course_and_exam));
@@ -204,33 +204,66 @@ function info_unpopulator (side) {
 function findDuplicateExamDays(courses) {
     const dayMap = {};
     const timeMap = {};
-    const duplicates = [];
+    const dateDuplicates = [];
+    const timeDuplicates = [];
 
     courses.forEach(course => {
+        // Track courses by date
         if (!dayMap[course.date]) {
             dayMap[course.date] = [course.courseCode];
         } else {
             if (!dayMap[course.date].includes(course.courseCode)) {
                 dayMap[course.date].push(course.courseCode);
             }
-            if (dayMap[course.date].length > 1 && !duplicates.some(d => d.date === course.date)) {
-                duplicates.push({ 
+            if (dayMap[course.date].length > 1 && !dateDuplicates.some(d => d.date === course.date)) {
+                dateDuplicates.push({ 
                     date: course.date, 
                     courseCodes: dayMap[course.date] 
                 });
             }
         }
+
+        // Track courses by time
+        const dateTimeKey = `${course.date} ${course.time}`;
+        if (!timeMap[dateTimeKey]) {
+            timeMap[dateTimeKey] = [course.courseCode];
+        } else {
+            if (!timeMap[dateTimeKey].includes(course.courseCode)) {
+                timeMap[dateTimeKey].push(course.courseCode);
+            }
+            if (timeMap[dateTimeKey].length > 1 && !timeDuplicates.some(d => d.dateTime === dateTimeKey)) {
+                timeDuplicates.push({ 
+                    dateTime: dateTimeKey, 
+                    courseCodes: timeMap[dateTimeKey] 
+                });
+            }
+        }
     });
 
-    return duplicates;
+    console.log("Date Duplicates:", dateDuplicates);
+    console.log("Time Duplicates:", timeDuplicates);
+    return { dateDuplicates, timeDuplicates };
 }
 
 function populateExamWarning(duplicateDays) {
     const examWarningElement = document.querySelector('.examWarning');
-    if (duplicateDays.length === 0) {
+    const { dateDuplicates, timeDuplicates } = duplicateDays;
+
+    let html = '';
+
+    if (dateDuplicates.length > 0) {
+        html += '<strong>Date Clashes:</strong><br>';
+        html += dateDuplicates.map(day => `${day.courseCodes.join(', ')} exam clashes on ${day.date}<br>`).join('');
+    }
+
+    if (timeDuplicates.length > 0) {
+        html += '<strong>Time Clashes:</strong><br>';
+        html += timeDuplicates.map(day => `${day.courseCodes.join(', ')} exam clashes on ${day.dateTime}<br>`).join('');
+    }
+
+    if (html === '') {
         examWarningElement.innerHTML = '';
     } else {
-        const html = duplicateDays.map(day => `${day.courseCodes.join(', ')} exam clashes on ${day.date}<br>`).join('');
         examWarningElement.innerHTML = html; // Populate inner HTML
     }
 }
