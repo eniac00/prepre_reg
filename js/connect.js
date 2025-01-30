@@ -7,6 +7,11 @@ async function start() {
     const scheduleData = await res.json();
     const schedule = scheduleData
 
+    schedule.sort(function(a, b) {
+        let courseA = `${a.courseCode}-${a.sectionName}`;
+        let courseB = `${b.courseCode}-${b.sectionName}`;
+        return courseA.localeCompare(courseB);
+    });
 
     // sort the courses according to the section (ascending)
     // console.log(schedule[0])

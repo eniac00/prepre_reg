@@ -30,7 +30,7 @@ function push_to_table(datum) {
         if (timeSlot) {
             let cellId = getCellId(day, timeSlot);
             if (cellId) {
-                check(cellId, details);
+                insertIntoCell(cellId, details);
             }
         }
     }
@@ -54,10 +54,37 @@ function push_to_table(datum) {
             slots.forEach(slot => {
                 let cellId = getCellId(day, slot);
                 if (cellId) {
-                    check(cellId, labDetails);
+                    insertIntoCell(cellId, labDetails);
                 }
             });
         });
+    }
+}
+
+function insertIntoCell(id, details) {
+    let elem = document.getElementById(id);
+    if (!elem) return;
+
+    if (elem.innerHTML === "") {
+        // Cell is empty, simply insert the details
+        elem.innerHTML = details;
+        elem.style.color = "white";
+        elem.classList.add("tda");
+    } else {
+        // Cell already has content, check if it's the same course
+        let existingCourseCode = elem.innerHTML.split('-')[0];
+        let newCourseCode = details.split('-')[0];
+        
+        if (existingCourseCode === newCourseCode) {
+            // Same course, update the details
+            elem.innerHTML = details;
+            elem.style.color = "white";
+            elem.classList.add("tda");
+        } else {
+            // Different course, mark as conflict
+            elem.innerHTML = `<b>${details}</b>`;
+            elem.style.color = "red";
+        }
     }
 }
 
@@ -169,23 +196,17 @@ function getCellId(day, timeSlot) {
     return row && column ? `${row}-${column}` : null;
 }
 
-function check(id, details) {
-    let elem = document.getElementById(id);
-    if (elem.innerHTML != "" && elem.innerHTML != details) {
-        elem.innerHTML = "<b>" + details + "</b>";
-        elem.style.color = "red";
-    } else {
-        elem.innerHTML = details;
-        elem.style.color = "white";
-        elem.classList.add("tda")
-    }
-}
-
-function blanking_table(){
-    for(let i=1; i<=7; i++){
-        for(let j=1; j<=7; j++){
+// Function to clear the table
+function blanking_table() {
+    for(let i=1; i<=7; i++) {
+        for(let j=1; j<=7; j++) {
             let id = i + "-" + j;
-            document.getElementById(id).innerHTML = "";
+            let elem = document.getElementById(id);
+            if (elem) {
+                elem.innerHTML = "";
+                elem.style.color = "white";
+                elem.classList.remove("tda");
+            }
         }
     }
 }
