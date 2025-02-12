@@ -4,11 +4,6 @@ function push_to_table(datum) {
     for(let i = 0; i < datum["preRegSchedule"].length; i++) {
         let schedule = datum["preRegSchedule"][i];
         
-        // Skip lab schedules - they contain different room names (ending with 'L')
-        if (schedule.includes("-L)")) {
-            continue;
-        }
-
         // Match the day part
         let dayMatch = schedule.match(/^\w+(?=\()/);
         let day = dayMatch ? dayMatch[0] : "Day not found";
@@ -23,14 +18,29 @@ function push_to_table(datum) {
         let time = `${startHour.padStart(2, '0')}:${startMin} ${startMeridian.toUpperCase()}-${endHour.padStart(2, '0')}:${endMin} ${endMeridian.toUpperCase()}`;
         
         // making the details for inserting inside table cell
-        let details = `${datum['courseCode']}-${datum.sectionName}-${datum['faculties']}-${datum['roomName']}`;
-
-        // For regular classes, find the exact time slot
-        let timeSlot = getExactTimeSlot(time);
-        if (timeSlot) {
-            let cellId = getCellId(day, timeSlot);
-            if (cellId) {
-                insertIntoCell(cellId, details);
+        let details;
+        let isLab = schedule.includes("-L)") || datum.sectionType === "LAB";
+        
+        if (isLab) {
+            details = `${datum['courseCode']}-${datum.sectionName}-${datum['faculties']}-${datum['labRoomName'] || datum['roomName']}`;
+            // Handle lab time slots
+            let [startTime, endTime] = parseTimeRange(time);
+            let slots = getAffectedTimeSlots(startTime, endTime);
+            slots.forEach(slot => {
+                let cellId = getCellId(day, slot);
+                if (cellId) {
+                    insertIntoCell(cellId, details);
+                }
+            });
+        } else {
+            details = `${datum['courseCode']}-${datum.sectionName}-${datum['faculties']}-${datum['roomName']}`;
+            // For regular classes, find the exact time slot
+            let timeSlot = getExactTimeSlot(time);
+            if (timeSlot) {
+                let cellId = getCellId(day, timeSlot);
+                if (cellId) {
+                    insertIntoCell(cellId, details);
+                }
             }
         }
     }
@@ -48,7 +58,7 @@ function push_to_table(datum) {
             let labDetails = `${datum['courseCode']}-${datum.sectionName}-${datum['faculties']}-${datum['labRoomName']}`;
             
             // For labs, find all affected standard time slots
-            let slots = getAffectedTimeSlots(`${startTime}`, `${endTime}`);
+            let slots = getAffectedTimeSlots(startTime, endTime);
             
             // Insert into each affected slot
             slots.forEach(slot => {
