@@ -6,7 +6,7 @@
 
 function push_to_table (datum) {
 
-
+    console.log(datum)
     for(let i=0; i< datum["classSchedule"].length; i++){
         
         // defining regex for filtering out Day, Time and Room subsequently from each iteration
