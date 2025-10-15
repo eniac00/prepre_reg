@@ -25,6 +25,7 @@ async function start() {
     // also changing ["Day, Time, Room"] entry from string to array by using regex
     for (let i = 1; i < schedule.length; i++) {        
         //RESUME HERE
+        
 
 
         let matches = schedule[i]["preRegSchedule"] ? schedule[i]["preRegSchedule"].match(re) : null;
@@ -50,15 +51,23 @@ async function start() {
     console.log(data)
 
     // defining dlb
+    let total_credit = 0;
     let dlb = new DualListbox('.dlb', {
 
         // this function will be triggered when the add button is pressed within dlb
         addEvent: function (value) {
 
-            if (this.selected.length < 6) {
+            if (total_credit + data[value - 1]['desc']['courseCredit'] <= 15) {
+                // console.log("Logging this.selected");
+                // console.log(this.selected);
+                // console.log("Value:", value);
                 let flag = true;
                 let data_index;
                 let course_desc;
+                // This loops through the selected courses. And sees if the course being added is already in the selected courses list.
+                // the variable 'value' is the index of the course being added.
+                // value - 1 is used because the data array is 0-indexed, but the value from the dual listbox starts from 1.
+                // Hence value and value - 1 are correlated. data[value-1] is the course being added.
                 for (let i = 0; i < this.selected.length - 1; i++) {
                     if (this.selected[i].innerHTML.split(':')[0] == data[value - 1]['desc']["courseCode"]) {
                         this.removeSelected(document.querySelector(`[data-id="${value}"]`));
@@ -67,11 +76,18 @@ async function start() {
                     }
                 }
                 if (flag) {
+                    total_credit = 0;
                     for (let i = 0; i < this.selected.length; i++) {
                         data_index = this.selected[i].getAttribute("data-id");
                         course_desc = data[data_index - 1]['desc'];
+                        // console.log("Logging Course Desc under True flag")
+                        // console.log("current credits:", total_credit);
+
+                        total_credit += course_desc['courseCredit'];
+                        // console.log("Updated credits:", total_credit);
                         push_to_table(course_desc);
                     }
+                    document.getElementById("total_credit").innerHTML = total_credit;
                     course_desc = data[data_index-1]['desc'];
                     // const dateRegex = /\((\d{2}-\d{2}-\d{4})\)/;
                     // const timeRegex = /\((\d{2}:\d{2}\s(?:AM|PM)-\d{2}:\d{2}\s(?:AM|PM))\)/;
@@ -94,7 +110,7 @@ async function start() {
                 console.log(course_and_exam);
             } else {
                 this.removeSelected(document.querySelector(`[data-id="${value}"]`));
-                document.querySelector('.warning').innerHTML = "You cannot select more than 5 courses";
+                document.querySelector('.warning').innerHTML = "You cannot select more than 15 Credits";
             }
         },
 
@@ -113,10 +129,15 @@ async function start() {
             if (flag) {
                 document.querySelector('.warning').innerHTML = "";
                 blanking_table();
+                total_credit = 0;
                 for (let i = 0; i < this.selected.length; i++) {
                     data_index = this.selected[i].getAttribute("data-id")
                     push_to_table(data[data_index - 1]['desc']);
+                    course_desc = data[data_index - 1]['desc'];
+                    total_credit += course_desc['courseCredit'];
+
                 }
+                document.getElementById("total_credit").innerHTML = total_credit;
                 course_desc = data[value-1]['desc'];
                 course_and_exam = course_and_exam.filter(course => course.courseCode !== course_desc.courseCode);
                 populateExamWarning(findDuplicateExamDays(course_and_exam));

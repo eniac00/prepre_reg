@@ -87,6 +87,13 @@ body > footer > a {
     color: white;
 }
 
+.total_credit_div {
+    text-align: center;
+    color: white;
+    font-size: 15px;
+    margin-top: 20px;
+}
+
 
 .routine-table th, .routine-table td, .routine-table tr {
     color: white;
