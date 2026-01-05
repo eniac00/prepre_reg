@@ -220,3 +220,68 @@ function blanking_table() {
         }
     }
 }
+
+
+function getTableHash() {
+	// encodes filled up table cells to 49bit number (less than 53bits, so we are safe)
+	let hash = 0
+	for(let i=1; i<=7; i++) {
+        for(let j=1; j<=7; j++) {
+            let id = i + "-" + j;
+            let elem = document.getElementById(id);
+            if (elem) {
+				if (elem.innerHTML === "") {
+					hash = hash * 2
+				} else {
+					hash = hash * 2 + 1
+				}
+            }
+        }
+    }
+	return hash
+}
+
+function getScheduleHash(datum) {
+	// returns schedule hash for a course (49bit)
+	if (datum["scheduleHash"]) return datum["scheduleHash"]
+	let hash = 0
+	// Handle regular class schedules
+    for(let i = 0; i < datum["preRegSchedule"].length; i++) {
+        let schedule = datum["preRegSchedule"][i];
+        
+        // Match the day part
+        let dayMatch = schedule.match(/^\w+(?=\()/);
+        let day = dayMatch ? dayMatch[0] : "Day not found";
+        day = day.charAt(0).toUpperCase() + day.slice(1).toLowerCase();
+
+        // Match the time part with more flexible regex
+        let timeMatch = schedule.match(/(\d{1,2}):(\d{2})\s*(AM|PM)\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+        if (!timeMatch) continue;
+
+        // Reconstruct time with consistent format
+        let [_, startHour, startMin, startMeridian, endHour, endMin, endMeridian] = timeMatch;
+        let time = `${startHour.padStart(2, '0')}:${startMin} ${startMeridian.toUpperCase()}-${endHour.padStart(2, '0')}:${endMin} ${endMeridian.toUpperCase()}`;
+        
+        let isLab = schedule.includes("-L)") || datum.sectionType === "LAB";
+        
+        let [startTime, endTime] = parseTimeRange(time);
+        let slots = getAffectedTimeSlots(startTime, endTime);
+        slots.forEach(slot => {
+            let cellId = getCellId(day, slot);
+            if (cellId) {
+				let [row, col] = cellId.split('-');
+				row -= 1;
+				col -= 1;
+				hash += 2**(48 - row*7 - col)
+            }
+        });
+    }
+	datum['scheduleHash'] = hash
+	return hash
+}
+
+function checkClash(datum) {
+	// returns non zero if datum clashes with selected courses
+	// js bitwise operations only supports upto 32 bits. we need 49bits. that is why bigint
+	return BigInt(getTableHash()) & BigInt(getScheduleHash(datum))
+}

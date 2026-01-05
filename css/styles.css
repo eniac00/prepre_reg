@@ -125,6 +125,10 @@ body > footer > a {
      padding: 20px;
 }
 
+.clashLint {
+     color: red;
+}
+
 .examWarning {
      font-size: 20px;
      /*
