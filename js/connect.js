@@ -23,9 +23,9 @@ function loadRoutine() {
 async function start() {
     
     // poking the schedules route for the json data
-    const res = await fetch('https://usis-cdn.eniamza.com/connect.json');
+    const res = await fetch('https://usis-cdn.eniamza.com/connect-migrate.json');
     const scheduleData = await res.json();
-    const schedule = scheduleData;
+    const schedule = scheduleData.courses;
 
     schedule.sort(function(a, b) {
         let courseA = `${a.courseCode}-${a.sectionName}`;
