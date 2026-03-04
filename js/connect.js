@@ -215,6 +215,7 @@ async function start() {
 
 function info_populator(side, course_desc) {
     document.querySelector(`.${side} #cname`).innerHTML = course_desc["courseCode"];
+    document.querySelector(`.${side} #ctitle`).innerHTML = course_desc["courseName"];
     document.querySelector(`.${side} #faculty`).innerHTML = `${course_desc["faculties"]}`;
     document.querySelector(`.${side} #section`).innerHTML = course_desc['sectionName'];
     document.querySelector(`.${side} #time`).innerHTML = course_desc["preRegSchedule"];
@@ -226,6 +227,7 @@ function info_populator(side, course_desc) {
 
 function info_unpopulator(side) {
     document.querySelector(`.${side} #cname`).innerHTML = "";
+    document.querySelector(`.${side} #ctitle`).innerHTML = "";
     document.querySelector(`.${side} #faculty`).innerHTML = "";
     document.querySelector(`.${side} #section`).innerHTML = "";
     document.querySelector(`.${side} #time`).innerHTML = "";
