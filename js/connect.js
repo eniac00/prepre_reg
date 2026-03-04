@@ -1,10 +1,17 @@
 // Storage key for localStorage
 const STORAGE_KEY = 'preprereg_saved_routine';
 
-// Save selected course IDs to localStorage
-function saveRoutine(selectedCourses) {
-    const courseIds = selectedCourses.map(item => item.getAttribute('data-id'));
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(courseIds));
+// Save selected section IDs to localStorage
+function saveRoutine(selectedCourses, data) {
+    const sectionIds = selectedCourses
+        .map(item => {
+            const dataId = Number(item.getAttribute('data-id'));
+            const course = data[dataId - 1]?.desc;
+            return course?.sectionId;
+        })
+        .filter(sectionId => sectionId !== undefined && sectionId !== null);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sectionIds));
 }
 
 // Load saved routine from localStorage
@@ -108,7 +115,7 @@ async function start() {
                 
                 // Auto-save after adding (skip during initial load)
                 if (!isLoadingRoutine) {
-                    saveRoutine(this.selected);
+                    saveRoutine(this.selected, data);
                 }
             }
         },
@@ -148,7 +155,7 @@ async function start() {
                 }
                 
                 // Auto-save after removing
-                saveRoutine(this.selected);
+                saveRoutine(this.selected, data);
             }
         },
 
@@ -162,11 +169,15 @@ async function start() {
     });
 
     // Load saved routine on startup
-    const savedIds = loadRoutine();
-    if (savedIds.length > 0) {
+    const savedSectionIds = loadRoutine();
+    if (savedSectionIds.length > 0) {
         isLoadingRoutine = true; // Set flag to bypass credit check
-        savedIds.forEach(id => {
-            const item = document.querySelector(`[data-id="${id}"]`);
+        savedSectionIds.forEach(sectionId => {
+            const matchedOption = data.find(option => option.desc?.sectionId === sectionId);
+            const item = matchedOption
+                ? document.querySelector(`[data-id="${matchedOption.value}"]`)
+                : null;
+
             if (item && dlb.available.includes(item)) {
                 dlb.addSelected(item);
             }
@@ -174,7 +185,7 @@ async function start() {
         isLoadingRoutine = false; // Reset flag after loading
         
         // Save the routine again to clean up any invalid IDs
-        saveRoutine(dlb.selected);
+        saveRoutine(dlb.selected, data);
     }
 
     // Click event handler
