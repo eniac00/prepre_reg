@@ -36,6 +36,29 @@ body > footer > a {
     padding-bottom: 2px;
 }
 
+.last-updated {
+    text-align: center;
+    margin: 5px auto 8px;
+    color: white;
+}
+
+.last-updated h5 {
+    display: inline-block;
+    margin: 0;
+    padding: 4px 8px;
+    border: 1px solid cyan;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    background-color: rgba(4, 29, 83, 0.55);
+}
+
+#last_updated {
+    color: cyan;
+    font-weight: 700;
+}
+
 .icons {
     display: flex; 
     justify-content: center; 
@@ -214,6 +237,11 @@ table {
 
     .heading > h1 {
         font-size: 20px;
+    }
+
+    .last-updated h5 {
+        font-size: 11px;
+        padding: 5px 10px;
     }
 
     .container {

@@ -27,6 +27,14 @@ async function start() {
     const scheduleData = await res.json();
     const schedule = scheduleData.courses;
 
+    const lastUpdatedElement = document.getElementById('last_updated');
+    if (scheduleData.metadata.lastUpdated) {
+        const lastUpdatedDate = new Date(scheduleData.metadata.lastUpdated);
+        lastUpdatedElement.textContent = lastUpdatedDate.toLocaleString();
+    } else {
+        lastUpdatedElement.textContent = 'Unknown';
+    }
+
     schedule.sort(function(a, b) {
         let courseA = `${a.courseCode}-${a.sectionName}`;
         let courseB = `${b.courseCode}-${b.sectionName}`;
