@@ -1,11 +1,39 @@
+// Storage key for localStorage
+const STORAGE_KEY = 'preprereg_saved_routine';
+
+// Save selected section IDs to localStorage
+function saveRoutine(selectedCourses, data) {
+    const sectionIds = selectedCourses
+        .map(item => {
+            const dataId = Number(item.getAttribute('data-id'));
+            const course = data[dataId - 1]?.desc;
+            return course?.sectionId;
+        })
+        .filter(sectionId => sectionId !== undefined && sectionId !== null);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sectionIds));
+}
+
+// Load saved routine from localStorage
+function loadRoutine() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+}
 
 async function start() {
-
     
     // poking the schedules route for the json data
-    const res = await fetch('https://usis-cdn.eniamza.com/connect.json');
+    const res = await fetch('https://usis-cdn.eniamza.com/connect-migrate.json');
     const scheduleData = await res.json();
-    const schedule = scheduleData
+    const schedule = scheduleData.courses;
+
+    const lastUpdatedElement = document.getElementById('last_updated');
+    if (scheduleData.metadata.lastUpdated) {
+        const lastUpdatedDate = new Date(scheduleData.metadata.lastUpdated);
+        lastUpdatedElement.textContent = lastUpdatedDate.toLocaleString();
+    } else {
+        lastUpdatedElement.textContent = 'Unknown';
+    }
 
     schedule.sort(function(a, b) {
         let courseA = `${a.courseCode}-${a.sectionName}`;
@@ -13,8 +41,6 @@ async function start() {
         return courseA.localeCompare(courseB);
     });
 
-    // sort the courses according to the section (ascending)
-    // console.log(schedule[0])
     const data = [];
     let course_and_exam = [];
 
@@ -22,22 +48,14 @@ async function start() {
     let re = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\(\d{1,2}:\d{2}\s(AM|PM)-\d{1,2}:\d{2}\s(AM|PM)(-[^\)]+)?\)(\\n(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\(\d{1,2}:\d{2}\s(AM|PM)-\d{1,2}:\d{2}\s(AM|PM)(-[^\)]+)?\))*/gi;
 
     // making the data for passing in the dlb (dual list box)
-    // also changing ["Day, Time, Room"] entry from string to array by using regex
-    for (let i = 1; i < schedule.length; i++) {        
-        //RESUME HERE
-        
-
-
+    for (let i = 1; i < schedule.length; i++) {
         let matches = schedule[i]["preRegSchedule"] ? schedule[i]["preRegSchedule"].match(re) : null;
-    
-        // If matches is null, store an empty array
         schedule[i]["preRegSchedule"] = matches ? matches : [];
-        console.log(schedule[i])
 
         if (schedule[i]["preRegLabSchedule"]) {
             let labMatches = schedule[i]["preRegLabSchedule"].match(re);
             if (labMatches) {
-                schedule[i]["preRegSchedule"].push(...labMatches); // Use spread operator to flatten the array
+                schedule[i]["preRegSchedule"].push(...labMatches);
             }
         }
 
@@ -48,73 +66,68 @@ async function start() {
         });
     }
 
-    console.log(data)
-
-    // defining dlb
     let total_credit = 0;
+    let isLoadingRoutine = false; // Flag to bypass credit check during load
+
     let dlb = new DualListbox('.dlb', {
 
-        // this function will be triggered when the add button is pressed within dlb
         addEvent: function (value) {
-
-            if (total_credit + data[value - 1]['desc']['courseCredit'] <= 15) {
-                // console.log("Logging this.selected");
-                // console.log(this.selected);
-                // console.log("Value:", value);
-                let flag = true;
-                let data_index;
-                let course_desc;
-                // This loops through the selected courses. And sees if the course being added is already in the selected courses list.
-                // the variable 'value' is the index of the course being added.
-                // value - 1 is used because the data array is 0-indexed, but the value from the dual listbox starts from 1.
-                // Hence value and value - 1 are correlated. data[value-1] is the course being added.
-                for (let i = 0; i < this.selected.length - 1; i++) {
-                    if (this.selected[i].innerHTML.split(':')[0] == data[value - 1]['desc']["courseCode"]) {
-                        this.removeSelected(document.querySelector(`[data-id="${value}"]`));
-                        document.querySelector('.warning').innerHTML = "You can not select same course";
-                        flag = false;
-                    }
-                }
-                if (flag) {
-                    total_credit = 0;
-                    for (let i = 0; i < this.selected.length; i++) {
-                        data_index = this.selected[i].getAttribute("data-id");
-                        course_desc = data[data_index - 1]['desc'];
-                        // console.log("Logging Course Desc under True flag")
-                        // console.log("current credits:", total_credit);
-
-                        total_credit += course_desc['courseCredit'];
-                        // console.log("Updated credits:", total_credit);
-                        push_to_table(course_desc);
-                    }
-                    document.getElementById("total_credit").innerHTML = total_credit;
-                    course_desc = data[data_index-1]['desc'];
-                    // const dateRegex = /\((\d{2}-\d{2}-\d{4})\)/;
-                    // const timeRegex = /\((\d{2}:\d{2}\s(?:AM|PM)-\d{2}:\d{2}\s(?:AM|PM))\)/;
-
-                    // let dateMatch = course_desc.dayNo.match(dateRegex);
-                    // let timeMatch = course_desc.dayNo.match(timeRegex);
-
-                    // console.log(dateMatch, timeMatch);
-
-                    course_and_exam.push({ 
-                        'courseCode': course_desc.courseCode, 
-                        'date': course_desc?.sectionSchedule?.finalExamDate || 'N/A',
-                        'time': course_desc?.sectionSchedule?.finalExamStartTime || 'N/A'
-
-                    });
-                    populateExamWarning(findDuplicateExamDays(course_and_exam));
-                    info_populator("right", course_desc);
-                    info_unpopulator("left");
-                }
-                console.log(course_and_exam);
-            } else {
+            const newCourseCredit = data[value - 1]['desc']['courseCredit'];
+            
+            // Skip credit check if we're loading from localStorage
+            if (!isLoadingRoutine && total_credit + newCourseCredit > 15) {
                 this.removeSelected(document.querySelector(`[data-id="${value}"]`));
                 document.querySelector('.warning').innerHTML = "You cannot select more than 15 Credits";
+                return;
+            }
+
+            let flag = true;
+            let data_index;
+            let course_desc;
+            
+            // Check for duplicate course
+            for (let i = 0; i < this.selected.length - 1; i++) {
+                if (this.selected[i].innerHTML.split(':')[0] == data[value - 1]['desc']["courseCode"]) {
+                    this.removeSelected(document.querySelector(`[data-id="${value}"]`));
+                    document.querySelector('.warning').innerHTML = "You can not select same course";
+                    flag = false;
+                    break;
+                }
+            }
+            
+            if (flag) {
+                document.querySelector('.warning').innerHTML = "";
+                blanking_table();
+                
+                // Reset and recalculate total credit from all selected courses
+                total_credit = 0;
+                for (let i = 0; i < this.selected.length; i++) {
+                    data_index = this.selected[i].getAttribute("data-id");
+                    course_desc = data[data_index - 1]['desc'];
+                    push_to_table(course_desc);
+                    total_credit += course_desc['courseCredit'];
+                }
+                
+                // Update the display immediately
+                document.getElementById("total_credit").innerHTML = total_credit;
+
+                course_desc = data[value - 1]['desc'];
+                course_and_exam.push({ 
+                    'courseCode': course_desc.courseCode, 
+                    'date': course_desc?.sectionSchedule?.finalExamDate || 'N/A',
+                    'time': course_desc?.sectionSchedule?.finalExamStartTime || 'N/A'
+                });
+                populateExamWarning(findDuplicateExamDays(course_and_exam));
+                info_populator("right", course_desc);
+                info_unpopulator("left");
+                
+                // Auto-save after adding (skip during initial load)
+                if (!isLoadingRoutine) {
+                    saveRoutine(this.selected, data);
+                }
             }
         },
 
-        // this function will be triggered when the remove button is pressed within dlb
         removeEvent: function (value) {
             let flag = true;
             let data_index;
@@ -131,26 +144,27 @@ async function start() {
                 blanking_table();
                 total_credit = 0;
                 for (let i = 0; i < this.selected.length; i++) {
-                    data_index = this.selected[i].getAttribute("data-id")
+                    data_index = this.selected[i].getAttribute("data-id");
                     push_to_table(data[data_index - 1]['desc']);
                     course_desc = data[data_index - 1]['desc'];
                     total_credit += course_desc['courseCredit'];
-
                 }
                 document.getElementById("total_credit").innerHTML = total_credit;
-                course_desc = data[value-1]['desc'];
+                course_desc = data[value - 1]['desc'];
                 course_and_exam = course_and_exam.filter(course => course.courseCode !== course_desc.courseCode);
                 populateExamWarning(findDuplicateExamDays(course_and_exam));
                 info_populator("left", course_desc);
-                if(this.selected.length != 0){
-                    data_index = this.selected[this.selected.length-1].getAttribute("data-id");
-                    course_desc = data[data_index-1]['desc'];
+                if (this.selected.length != 0) {
+                    data_index = this.selected[this.selected.length - 1].getAttribute("data-id");
+                    course_desc = data[data_index - 1]['desc'];
                     info_populator("right", course_desc);
                 } else {
                     info_unpopulator("right");
                 }
+                
+                // Auto-save after removing
+                saveRoutine(this.selected, data);
             }
-                console.log(course_and_exam);
         },
 
         availableTitle: "Available Courses",
@@ -162,38 +176,48 @@ async function start() {
         options: data
     });
 
-    // function defined for for click event to be worked inside dlb
-    dlb.addEventListener('click', (event) => {
+    // Load saved routine on startup
+    const savedSectionIds = loadRoutine();
+    if (savedSectionIds.length > 0) {
+        isLoadingRoutine = true; // Set flag to bypass credit check
+        savedSectionIds.forEach(sectionId => {
+            const matchedOption = data.find(option => option.desc?.sectionId === sectionId);
+            const item = matchedOption
+                ? document.querySelector(`[data-id="${matchedOption.value}"]`)
+                : null;
 
+            if (item && dlb.available.includes(item)) {
+                dlb.addSelected(item);
+            }
+        });
+        isLoadingRoutine = false; // Reset flag after loading
+        
+        // Save the routine again to clean up any invalid IDs
+        saveRoutine(dlb.selected, data);
+    }
+
+    // Click event handler
+    dlb.addEventListener('click', (event) => {
         if (event.target.closest(".dual-listbox__available") && event.target.className == "dual-listbox__item dual-listbox__item--selected") {
             document.querySelector('.warning').innerHTML = "";
             let value = event.target.getAttribute('data-id');
-            let course_desc = data[value - 1]["desc"]
-            // console.log(course_desc);
+            let course_desc = data[value - 1]["desc"];
             info_populator("left", course_desc);
         }
         if (event.target.closest(".dual-listbox__selected") && event.target.className == "dual-listbox__item dual-listbox__item--selected") {
             document.querySelector('.warning').innerHTML = "";
             let value = event.target.getAttribute('data-id');
-            let course_desc = data[value - 1]["desc"]
+            let course_desc = data[value - 1]["desc"];
             info_populator("right", course_desc);
         }
     });
 }
 
-
-/*
- * function for filtering out information and pushing inside the table
- *
- * @param {String} the side where infos should be populated
- * @param {JSON} course description
- */
-function info_populator (side, course_desc) {
-
-    document.querySelector(`.${side} #cname`).innerHTML =  course_desc["courseCode"];
+function info_populator(side, course_desc) {
+    document.querySelector(`.${side} #cname`).innerHTML = course_desc["courseCode"];
+    document.querySelector(`.${side} #ctitle`).innerHTML = course_desc["courseName"];
     document.querySelector(`.${side} #faculty`).innerHTML = `${course_desc["faculties"]}`;
-    // document.querySelector(`.${side} #prereq`).innerHTML = course_desc["preRequisiteCourses"];
-    document.querySelector(`.${side} #section`).innerHTML = course_desc['sectionName']
+    document.querySelector(`.${side} #section`).innerHTML = course_desc['sectionName'];
     document.querySelector(`.${side} #time`).innerHTML = course_desc["preRegSchedule"];
     document.querySelector(`.${side} #exam`).innerHTML = course_desc?.sectionSchedule?.finalExamDetail || 'N/A';
     document.querySelector(`.${side} #avs`).innerHTML = course_desc["capacity"];
@@ -201,16 +225,10 @@ function info_populator (side, course_desc) {
     document.querySelector(`.${side} #sr`).innerHTML = course_desc["capacity"] - course_desc["consumedSeat"];
 }
 
-/*
- * function for filtering out information and pushing inside the table
- *
- * @param {String} the side where infos should be removed
- */
-function info_unpopulator (side) {
-
+function info_unpopulator(side) {
     document.querySelector(`.${side} #cname`).innerHTML = "";
+    document.querySelector(`.${side} #ctitle`).innerHTML = "";
     document.querySelector(`.${side} #faculty`).innerHTML = "";
-    // document.querySelector(`.${side} #prereq`).innerHTML = ""
     document.querySelector(`.${side} #section`).innerHTML = "";
     document.querySelector(`.${side} #time`).innerHTML = "";
     document.querySelector(`.${side} #exam`).innerHTML = "";
@@ -219,8 +237,6 @@ function info_unpopulator (side) {
     document.querySelector(`.${side} #sr`).innerHTML = "";
 }
 
-
-
 function findDuplicateExamDays(courses) {
     const dayMap = {};
     const timeMap = {};
@@ -228,7 +244,6 @@ function findDuplicateExamDays(courses) {
     const timeDuplicates = [];
 
     courses.forEach(course => {
-        // Track courses by date
         if (!dayMap[course.date]) {
             dayMap[course.date] = [course.courseCode];
         } else {
@@ -243,7 +258,6 @@ function findDuplicateExamDays(courses) {
             }
         }
 
-        // Track courses by time
         const dateTimeKey = `${course.date} ${course.time}`;
         if (!timeMap[dateTimeKey]) {
             timeMap[dateTimeKey] = [course.courseCode];
@@ -260,8 +274,6 @@ function findDuplicateExamDays(courses) {
         }
     });
 
-    console.log("Date Duplicates:", dateDuplicates);
-    console.log("Time Duplicates:", timeDuplicates);
     return { dateDuplicates, timeDuplicates };
 }
 
@@ -281,13 +293,7 @@ function populateExamWarning(duplicateDays) {
         html += timeDuplicates.map(day => `${day.courseCodes.join(', ')} exam clashes on ${day.dateTime}<br>`).join('');
     }
 
-    if (html === '') {
-        examWarningElement.innerHTML = '';
-    } else {
-        examWarningElement.innerHTML = html; // Populate inner HTML
-    }
+    examWarningElement.innerHTML = html;
 }
 
-
 start();
-

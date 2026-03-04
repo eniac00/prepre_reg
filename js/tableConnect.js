@@ -76,24 +76,31 @@ function insertIntoCell(id, details) {
     if (!elem) return;
 
     if (elem.innerHTML === "") {
-        // Cell is empty, simply insert the details
+        // First course: white
         elem.innerHTML = details;
         elem.style.color = "white";
         elem.classList.add("tda");
     } else {
-        // Cell already has content, check if it's the same course
-        let existingCourseCode = elem.innerHTML.split('-')[0];
+        // Remove HTML tags to compare course codes
+        let existingCourseCode = elem.innerHTML.split('-')[0].replace(/<[^>]*>/g, '');
         let newCourseCode = details.split('-')[0];
-        
-        if (existingCourseCode === newCourseCode) {
-            // Same course, update the details
-            elem.innerHTML = details;
-            elem.style.color = "white";
-            elem.classList.add("tda");
+
+        // If cell has only one course and it's not a span (no conflict yet)
+        if (!elem.innerHTML.includes('span')) {
+            if (existingCourseCode === newCourseCode) {
+                // Same course, update as white
+                elem.innerHTML = details;
+                elem.style.color = "white";
+                elem.classList.add("tda");
+            } else {
+                // Conflict: turn previous to yellow, new to red
+                let previous = `<span style=\"color:yellow\">${elem.innerText}</span>`;
+                let clash = `<span style=\"color:red\">${details}</span>`;
+                elem.innerHTML = previous + "<br>" + clash;
+            }
         } else {
-            // Different course, mark as conflict
-            elem.innerHTML = `<b>${details}</b>`;
-            elem.style.color = "red";
+            // Already in conflict, just add new course in red
+            elem.innerHTML += `<br><span style=\"color:red\">${details}</span>`;
         }
     }
 }
