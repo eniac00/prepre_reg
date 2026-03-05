@@ -296,7 +296,7 @@ function populateExamWarning(duplicateDays) {
 }
 
 function refreshClashLint(data) {
-	"From the available coureses lints those that would clash class or lab timings"
+	// From the available coureses lints those that would clash class or lab timings
 	let hash = BigInt(getTableHash())
 	document.querySelector('.dual-listbox__available').childNodes.forEach((elem) => {
 		let i = elem.getAttribute('data-id') - 1;

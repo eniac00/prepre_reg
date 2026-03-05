@@ -280,8 +280,3 @@ function getScheduleHash(datum) {
 	return hash
 }
 
-function checkClash(datum) {
-	// returns non zero if datum clashes with selected courses
-	// js bitwise operations only supports upto 32 bits. we need 49bits. that is why bigint
-	return BigInt(getTableHash()) & BigInt(getScheduleHash(datum))
-}
