@@ -196,21 +196,26 @@ async function start() {
         saveRoutine(dlb.selected, data);
     }
 
-    // Click event handler
-    dlb.addEventListener('click', (event) => {
-        if (event.target.closest(".dual-listbox__available") && event.target.className == "dual-listbox__item dual-listbox__item--selected") {
+        if (event.target.closest(".dual-listbox__available") && event.target.classList.contains("dual-listbox__item") && event.target.classList.contains("dual-listbox__item--selected")) {
             document.querySelector('.warning').innerHTML = "";
             let value = event.target.getAttribute('data-id');
             let course_desc = data[value - 1]["desc"];
             info_populator("left", course_desc);
         }
-        if (event.target.closest(".dual-listbox__selected") && event.target.className == "dual-listbox__item dual-listbox__item--selected") {
+        if (event.target.closest(".dual-listbox__selected") && event.target.classList.contains("dual-listbox__item") && event.target.classList.contains("dual-listbox__item--selected")) {
             document.querySelector('.warning').innerHTML = "";
             let value = event.target.getAttribute('data-id');
             let course_desc = data[value - 1]["desc"];
             info_populator("right", course_desc);
         }
     });
+	dlb.addEventListener('added', (event) => {
+		refreshClashLint(data)
+	})
+	
+	dlb.addEventListener('removed', (event) => {
+		refreshClashLint(data)
+	})
 }
 
 function info_populator(side, course_desc) {
@@ -296,4 +301,22 @@ function populateExamWarning(duplicateDays) {
     examWarningElement.innerHTML = html;
 }
 
+function refreshClashLint(data) {
+	// From the available coureses lints those that would clash class or lab timings
+	let hash = BigInt(getTableHash())
+	document.querySelector('.dual-listbox__available').childNodes.forEach((elem) => {
+		let i = elem.getAttribute('data-id') - 1;
+		if (BigInt(getScheduleHash(data[i]['desc'])) & hash) {
+			elem.classList.add('clashLint')
+		} else {
+			elem.classList.remove('clashLint')
+		}
+	})
+	
+	document.querySelector('.dual-listbox__selected').childNodes.forEach((elem) => {
+	    elem.classList.remove('clashLint')
+	})
+}
+	
 start();
+
