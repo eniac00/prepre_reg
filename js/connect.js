@@ -196,6 +196,8 @@ async function start() {
         saveRoutine(dlb.selected, data);
     }
 
+    // Click event handler
+    dlb.addEventListener('click', (event) => {
         if (event.target.closest(".dual-listbox__available") && event.target.classList.contains("dual-listbox__item") && event.target.classList.contains("dual-listbox__item--selected")) {
             document.querySelector('.warning').innerHTML = "";
             let value = event.target.getAttribute('data-id');
@@ -209,6 +211,7 @@ async function start() {
             info_populator("right", course_desc);
         }
     });
+
 	dlb.addEventListener('added', (event) => {
 		refreshClashLint(data)
 	})
